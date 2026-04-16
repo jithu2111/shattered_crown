@@ -2,6 +2,7 @@
 
 const USERS_FILE  = __DIR__ . '/users.json';
 const SCORES_FILE = __DIR__ . '/scores.json';
+const SAVES_FILE  = __DIR__ . '/saves.json';
 
 function loadUsers(): array {
     if (!file_exists(USERS_FILE)) return [];
@@ -112,6 +113,9 @@ function calculateScore(): int {
 }
 
 function resetGame(): void {
+    if (isset($_SESSION['user'])) {
+        deleteSave($_SESSION['user']);
+    }
     unset(
         $_SESSION['hero'],
         $_SESSION['node'],
@@ -121,4 +125,53 @@ function resetGame(): void {
         $_SESSION['alignment_history']
     );
     setcookie('sc_node', '', time() - 3600, '/');
+}
+
+// ── SAVE / LOAD GAME ──────────────────────────────
+
+function loadAllSaves(): array {
+    if (!file_exists(SAVES_FILE)) return [];
+    $raw = file_get_contents(SAVES_FILE);
+    $data = json_decode($raw, true);
+    return is_array($data) ? $data : [];
+}
+
+function saveAllSaves(array $saves): void {
+    file_put_contents(SAVES_FILE, json_encode($saves, JSON_PRETTY_PRINT), LOCK_EX);
+}
+
+function saveGame(): void {
+    if (!isset($_SESSION['user'], $_SESSION['hero'], $_SESSION['node'])) return;
+
+    $saves = loadAllSaves();
+    $saves[$_SESSION['user']] = [
+        'hero'              => $_SESSION['hero'],
+        'node'              => $_SESSION['node'],
+        'choices_log'       => $_SESSION['choices_log'] ?? [],
+        'locked_log'        => $_SESSION['locked_log'] ?? [],
+        'alignment'         => $_SESSION['alignment'] ?? 0,
+        'alignment_history' => $_SESSION['alignment_history'] ?? [],
+        'saved_at'          => date('c'),
+    ];
+    saveAllSaves($saves);
+}
+
+function loadSave(string $username): ?array {
+    $saves = loadAllSaves();
+    return $saves[$username] ?? null;
+}
+
+function restoreSave(array $save): void {
+    $_SESSION['hero']              = $save['hero'];
+    $_SESSION['node']              = $save['node'];
+    $_SESSION['choices_log']       = $save['choices_log'] ?? [];
+    $_SESSION['locked_log']        = $save['locked_log'] ?? [];
+    $_SESSION['alignment']         = $save['alignment'] ?? 0;
+    $_SESSION['alignment_history'] = $save['alignment_history'] ?? [];
+}
+
+function deleteSave(string $username): void {
+    $saves = loadAllSaves();
+    unset($saves[$username]);
+    saveAllSaves($saves);
 }

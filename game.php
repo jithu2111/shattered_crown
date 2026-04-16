@@ -69,11 +69,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isDead()) {
         $_SESSION['node'] = $chosen['next'];
+        saveGame();
         header('Location: ending.php?reason=death');
         exit;
     }
 
     $_SESSION['node'] = $chosen['next'];
+
+    saveGame();
 
     if (isset($nodes[$chosen['next']]) && $nodes[$chosen['next']]['is_terminal']) {
         header('Location: ending.php');
@@ -143,45 +146,88 @@ $body_class = 'page-game';
 
 <div class="game-layout">
 
-    <!-- ── LEFT SIDEBAR ────────────────────────── -->
-    <aside class="game-sidebar">
-        <div class="sidebar-section">
-            <h3 class="sidebar-heading">Story Path</h3>
-            <span class="sidebar-sub">NODE: <?= clean($node['title']) ?></span>
+    <!-- ── LEFT: WORLD MAP ──────────────────────── -->
+    <?php
+    $visited = $hero['nodes_visited'] ?? [];
+    $map_locations = [
+        // [id, label, x%, y%, icon]
+        ['node_01',              'Ruined Temple',       30, 72, '&#9961;'],
+        ['node_02',              'First Shard',         18, 62, '&#10070;'],
+        ['node_03',              'Crossroads',          50, 58, '&#10010;'],
+        ['node_05',              'Ice Caves',           72, 68, '&#10052;'],
+        ['node_06',              'Sable',               38, 48, '&#9830;'],
+        ['node_04',              'Ember Keep',          55, 38, '&#9876;'],
+        ['node_08',              'Broker\'s Passage',   40, 32, '&#9758;'],
+        ['node_07',              'Inside Keep',         62, 28, '&#9733;'],
+        ['node_09',              'Frozen Sanctum',      78, 50, '&#10052;'],
+        ['node_10',              'Sable\'s Revelation', 32, 38, '&#9790;'],
+        ['node_11',              'Ridge Road',          52, 22, '&#9650;'],
+        ['node_12',              'Tower Gate',          42, 14, '&#9608;'],
+        ['node_13',              'Hidden Entry',        62, 14, '&#9608;'],
+        ['node_14',              'Throne Room',         52,  6, '&#9813;'],
+        ['node_15',              'The Duel',            40,  0, '&#9876;'],
+        ['node_16',              'Ritual Collapse',     52,  0, '&#10026;'],
+        ['node_17',              'Silent Strike',       64,  0, '&#128065;'],
+    ];
+    $map_paths = [
+        [30,72, 18,62], [30,72, 50,58], // temple → shard, temple → crossroads
+        [18,62, 50,58],                   // shard → crossroads
+        [50,58, 55,38],                   // crossroads → ember keep
+        [50,58, 72,68],                   // crossroads → ice caves
+        [50,58, 38,48],                   // crossroads → sable
+        [55,38, 62,28], [55,38, 40,32],  // ember keep → inside, → broker
+        [40,32, 62,28],                   // broker → inside keep
+        [72,68, 78,50],                   // ice caves → frozen sanctum
+        [38,48, 32,38],                   // sable → revelation
+        [32,38, 55,38], [32,38, 52,22],  // revelation → ember keep, → ridge
+        [62,28, 52,22], [78,50, 52,22],  // inside keep → ridge, sanctum → ridge
+        [52,22, 42,14], [52,22, 62,14],  // ridge → tower gate, → hidden entry
+        [42,14, 52,6], [62,14, 52,6],    // gate → throne, hidden → throne
+        [52,6, 40,0], [52,6, 52,0], [52,6, 64,0], // throne → duel, ritual, silent
+    ];
+    ?>
+    <aside class="game-map">
+        <div class="map-header">
+            <span class="map-brand">The Shattered Crown</span>
+            <span class="map-region">VALDRIS</span>
         </div>
-
-        <nav class="sidebar-nav">
-            <a class="sidebar-link active">&#9998; The Path</a>
-            <a class="sidebar-link" title="Inventory: <?= count($hero['inventory']) ?> items">&#9876; Inventory</a>
-            <a class="sidebar-link">&#9734; Attributes</a>
-            <a class="sidebar-link">&#9733; Omen Tracker</a>
-        </nav>
-
-        <?php if (!empty($_SESSION['choices_log'])): ?>
-        <div class="sidebar-section path-log">
-            <h4 class="sidebar-heading-sm">Journey So Far</h4>
-            <?php foreach ($_SESSION['choices_log'] as $i => $entry): ?>
-                <div class="path-entry">
-                    <span class="path-node"><?= clean($entry['title']) ?></span>
-                    <span class="path-choice"><?= clean($entry['choice']) ?></span>
+        <div class="map-canvas">
+            <svg class="map-lines" viewBox="0 0 100 80" preserveAspectRatio="none">
+                <?php foreach ($map_paths as $p): ?>
+                    <line x1="<?= $p[0] ?>" y1="<?= $p[1] ?>" x2="<?= $p[2] ?>" y2="<?= $p[3] ?>" />
+                <?php endforeach; ?>
+            </svg>
+            <?php foreach ($map_locations as $loc): ?>
+                <?php
+                    [$mid, $mlabel, $mx, $my, $micon] = $loc;
+                    $is_current = ($mid === $node_id);
+                    $is_visited = in_array($mid, $visited, true);
+                    $state = $is_current ? 'current' : ($is_visited ? 'visited' : 'hidden');
+                ?>
+                <div class="map-node <?= $state ?>" style="left:<?= $mx ?>%;top:<?= $my ?>%">
+                    <span class="map-icon"><?= $micon ?></span>
+                    <?php if ($is_current): ?>
+                        <span class="map-badge">CURRENT</span>
+                    <?php endif; ?>
+                    <?php if ($is_current || $is_visited): ?>
+                        <span class="map-label"><?= clean($mlabel) ?></span>
+                    <?php else: ?>
+                        <span class="map-label dim">???</span>
+                    <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         </div>
-        <?php endif; ?>
 
-        <?php if (!empty($hero['inventory'])): ?>
-        <div class="sidebar-section">
-            <h4 class="sidebar-heading-sm">Inventory</h4>
-            <ul class="inv-list">
+        <div class="map-footer">
+            <?php if (!empty($hero['inventory'])): ?>
+            <div class="map-inv">
+                <span class="map-inv-title">Relics</span>
                 <?php foreach ($hero['inventory'] as $item): ?>
-                    <li><?= clean($item) ?></li>
+                    <span class="map-inv-item">&#9670; <?= clean($item) ?></span>
                 <?php endforeach; ?>
-            </ul>
-        </div>
-        <?php endif; ?>
-
-        <div class="sidebar-bottom">
-            <a href="logout.php" class="sidebar-link dim">&#8617; Quit</a>
+            </div>
+            <?php endif; ?>
+            <a href="logout.php" class="map-quit">&#8617; Quit</a>
         </div>
     </aside>
 

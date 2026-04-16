@@ -390,6 +390,69 @@ a:hover { color: var(--gold-soft); }
     letter-spacing: 0.06em;
 }
 
+/* ── SAVE CARD ──────────────────────────────────── */
+
+.save-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-str);
+    border-radius: 4px;
+    padding: 2rem;
+    max-width: 480px;
+    margin: 0 auto 2rem;
+    text-align: left;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.save-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    margin: 0 0 1rem;
+}
+
+.save-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 1.5rem;
+}
+
+.save-hero {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: var(--parchment);
+    font-weight: 700;
+}
+
+.save-meta {
+    font-size: 0.88rem;
+    color: var(--parchment);
+}
+
+.save-location {
+    font-size: 0.82rem;
+    font-style: italic;
+    color: var(--gold-soft);
+}
+
+.save-time {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+}
+
+.save-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.save-actions .btn {
+    flex: 1;
+    font-size: 0.75rem;
+    padding: 0.75rem 1rem;
+}
+
 /* ── GAME UI ────────────────────────────────────── */
 
 .page-game {
@@ -464,117 +527,172 @@ a:hover { color: var(--gold-soft); }
 
 .game-layout {
     display: grid;
-    grid-template-columns: 240px 1fr 320px;
+    grid-template-columns: 280px 1fr 320px;
     flex: 1;
     overflow: hidden;
 }
 
-/* ── LEFT SIDEBAR ──────────────────────────────── */
+/* ── LEFT: WORLD MAP ───────────────────────────── */
 
-.game-sidebar {
-    background: rgba(10, 10, 10, 0.6);
+.game-map {
+    background: rgba(6, 6, 6, 0.85);
     border-right: 1px solid var(--border);
-    padding: 1.25rem;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
-.sidebar-section { margin-bottom: 1.25rem; }
+.map-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+}
 
-.sidebar-heading {
+.map-brand {
+    display: block;
     font-family: 'Cinzel', serif;
-    font-size: 0.65rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+}
+
+.map-region {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
     letter-spacing: 0.28em;
-    color: var(--parchment);
-    text-transform: uppercase;
-    margin: 0 0 0.25rem;
+    color: var(--muted);
+    margin-top: 0.15rem;
 }
 
-.sidebar-heading-sm {
+.map-canvas {
+    flex: 1;
+    position: relative;
+    padding: 2.5rem 1.5rem;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 30% 70%, rgba(200, 160, 40, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 30%, rgba(155, 0, 0, 0.04) 0%, transparent 50%);
+}
+
+.map-lines {
+    position: absolute;
+    inset: 2.5rem 1.5rem;
+    width: calc(100% - 3rem);
+    height: calc(100% - 5rem);
+    pointer-events: none;
+}
+
+.map-lines line {
+    stroke: rgba(200, 160, 40, 0.15);
+    stroke-width: 0.4;
+    stroke-dasharray: 1.5 1;
+}
+
+.map-node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+}
+
+.map-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin: 0 auto 0.2rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 0.85rem;
+    background: var(--bg-elev);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.map-node.current .map-icon {
+    border-color: var(--gold);
+    box-shadow: 0 0 12px rgba(200, 160, 40, 0.4), 0 0 24px rgba(200, 160, 40, 0.15);
+    background: rgba(200, 160, 40, 0.12);
+}
+
+.map-node.visited .map-icon {
+    border-color: rgba(200, 160, 40, 0.35);
+    opacity: 0.7;
+}
+
+.map-node.hidden .map-icon {
+    border-color: rgba(100, 80, 50, 0.15);
+    opacity: 0.25;
+}
+
+.map-badge {
+    display: block;
     font-family: 'Cinzel', serif;
-    font-size: 0.58rem;
+    font-size: 0.42rem;
+    letter-spacing: 0.22em;
+    color: #1a1200;
+    background: var(--gold);
+    padding: 0.05rem 0.35rem;
+    border-radius: 2px;
+    margin: 0.15rem auto 0;
+    width: fit-content;
+}
+
+.map-label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.52rem;
+    letter-spacing: 0.12em;
+    color: var(--parchment);
+    white-space: nowrap;
+    margin-top: 0.1rem;
+}
+
+.map-label.dim {
+    color: rgba(138, 127, 106, 0.35);
+}
+
+.map-footer {
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+}
+
+.map-inv {
+    margin-bottom: 0.5rem;
+}
+
+.map-inv-title {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
     letter-spacing: 0.22em;
     color: var(--muted);
     text-transform: uppercase;
-    margin: 0 0 0.5rem;
+    margin-bottom: 0.3rem;
 }
 
-.sidebar-sub {
-    font-size: 0.6rem;
-    letter-spacing: 0.18em;
-    color: var(--muted);
-    text-transform: uppercase;
-}
-
-.sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    margin-bottom: 1.5rem;
-}
-
-.sidebar-link {
+.map-inv-item {
     display: block;
-    padding: 0.5rem 0.75rem;
-    font-family: 'Cinzel', serif;
     font-size: 0.72rem;
+    color: var(--parchment);
+    padding: 0.1rem 0;
+}
+
+.map-quit {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
     letter-spacing: 0.12em;
     color: var(--muted);
-    border-radius: 3px;
-    transition: background 0.15s ease, color 0.15s ease;
     text-decoration: none;
-}
-
-.sidebar-link:hover { background: rgba(200, 160, 40, 0.08); color: var(--parchment); }
-.sidebar-link.active { background: rgba(200, 160, 40, 0.12); color: var(--gold); border-left: 2px solid var(--gold); }
-.sidebar-link.dim { color: var(--muted); margin-top: auto; }
-
-.path-log { max-height: 200px; overflow-y: auto; }
-
-.path-entry {
-    padding: 0.4rem 0;
-    border-bottom: 1px solid rgba(200, 160, 40, 0.06);
-}
-
-.path-node {
-    display: block;
-    font-family: 'Cinzel', serif;
-    font-size: 0.6rem;
-    letter-spacing: 0.14em;
-    color: var(--gold-soft);
-}
-
-.path-choice {
-    display: block;
-    font-size: 0.78rem;
-    color: var(--muted);
-    font-style: italic;
-}
-
-.inv-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.inv-list li {
     padding: 0.3rem 0;
-    font-size: 0.82rem;
-    color: var(--parchment);
-    border-bottom: 1px solid rgba(200, 160, 40, 0.06);
+    transition: color 0.15s ease;
 }
 
-.inv-list li::before {
-    content: "\25C6 ";
-    color: var(--gold);
-    font-size: 0.6rem;
-}
-
-.sidebar-bottom {
-    margin-top: auto;
-    padding-top: 1rem;
-}
+.map-quit:hover { color: var(--gold); }
 
 /* ── MAIN STORY PANEL ──────────────────────────── */
 
@@ -745,7 +863,7 @@ a:hover { color: var(--gold-soft); }
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr auto;
     }
-    .game-sidebar { display: none; }
+    .game-map { display: none; }
     .game-choices {
         border-left: none;
         border-top: 1px solid var(--border);
