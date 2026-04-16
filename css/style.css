@@ -260,8 +260,142 @@ a:hover { color: var(--gold-soft); }
 .landing-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 .landing-actions .btn { width: auto; min-width: 200px; }
 
+/* ── CHARACTER SELECT ───────────────────────────── */
+
+.char-select {
+    text-align: center;
+    width: 100%;
+    max-width: 640px;
+}
+
+.char-kicker {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+}
+
+.char-title {
+    font-style: italic;
+    margin-bottom: 2rem;
+}
+
+.char-name-field {
+    max-width: 380px;
+    margin: 0 auto 2rem;
+    text-align: left;
+}
+
+.class-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.class-card {
+    cursor: pointer;
+    display: block;
+}
+
+.class-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.class-card-inner {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.class-card:hover .class-card-inner {
+    border-color: var(--border-str);
+    transform: translateY(-1px);
+}
+
+.class-card input:checked ~ .class-card-inner {
+    border-color: var(--gold);
+    box-shadow: 0 0 20px rgba(200, 160, 40, 0.15), inset 0 0 0 1px var(--gold);
+}
+
+.class-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    text-align: left;
+}
+
+.class-icon {
+    font-size: 1.5rem;
+    width: 2rem;
+    text-align: center;
+}
+
+.class-label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--parchment);
+}
+
+.class-arch {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.28em;
+    color: var(--muted);
+    margin-top: 0.15rem;
+}
+
+.class-stats {
+    display: flex;
+    gap: 1.5rem;
+    padding-left: 3rem;
+}
+
+.class-stats .stat {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: var(--parchment);
+}
+
+.class-stats .stat em {
+    display: block;
+    font-style: normal;
+    font-size: 0.55rem;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    margin-bottom: 0.15rem;
+}
+
+.btn-select {
+    max-width: 380px;
+    margin: 0 auto;
+    display: block;
+}
+
+.char-note {
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+}
+
+/* ── RESPONSIVE ────────────────────────────────── */
+
 @media (max-width: 600px) {
     .site-header { padding: 1rem; flex-direction: column; gap: 0.5rem; }
     .form-card { padding: 2rem 1.5rem; }
     .site-main { padding: 2rem 1rem; }
+    .class-stats { padding-left: 0; justify-content: center; }
+    .class-header { justify-content: center; text-align: center; }
 }
