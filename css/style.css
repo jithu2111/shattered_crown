@@ -87,7 +87,20 @@ a:hover { color: var(--gold-soft); }
     font-size: 0.72rem;
     letter-spacing: 0.24em;
     color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
+
+.header-logout {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.header-logout:hover { color: var(--gold); }
 
 .meta-line {
     color: var(--crimson-hot);
