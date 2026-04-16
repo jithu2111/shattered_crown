@@ -150,73 +150,65 @@ $body_class = 'page-game';
     <?php
     $visited = $hero['nodes_visited'] ?? [];
 
-    // 6 major landmarks — each maps to a group of story nodes
-    $landmarks = [
-        [
-            'id'    => 'ruined_temple',
-            'label' => 'Ruined Temple',
-            'icon'  => '&#9961;',
-            'nodes' => ['node_01', 'node_02'],
-            'x' => 38, 'y' => 82,
-        ],
-        [
-            'id'    => 'crossroads',
-            'label' => 'Crossroads',
-            'icon'  => '&#10010;',
-            'nodes' => ['node_03', 'node_06', 'node_10'],
-            'x' => 55, 'y' => 62,
-        ],
-        [
-            'id'    => 'ice_caves',
-            'label' => 'Ice Caves',
-            'icon'  => '&#10052;',
-            'nodes' => ['node_05', 'node_09'],
-            'x' => 78, 'y' => 72,
-        ],
-        [
-            'id'    => 'ember_keep',
-            'label' => 'Ember Keep',
-            'icon'  => '&#9876;',
-            'nodes' => ['node_04', 'node_07', 'node_08'],
-            'x' => 60, 'y' => 40,
-        ],
-        [
-            'id'    => 'ridge_road',
-            'label' => 'The Ridge',
-            'icon'  => '&#9650;',
-            'nodes' => ['node_11', 'node_12', 'node_13'],
-            'x' => 45, 'y' => 22,
-        ],
-        [
-            'id'    => 'malachar_tower',
-            'label' => 'Malachar\'s Tower',
-            'icon'  => '&#9813;',
-            'nodes' => ['node_14', 'node_15', 'node_16', 'node_17'],
-            'x' => 50, 'y' => 5,
-        ],
+    // All 17 nodes — positioned in clear tiers, bottom to top
+    // Tier 1 (y=88): Act 1 start
+    // Tier 2 (y=76): Act 1 discovery
+    // Tier 3 (y=64): Crossroads hub
+    // Tier 4 (y=52): Act 2 branches
+    // Tier 5 (y=40): Act 2 interiors
+    // Tier 6 (y=28): Act 3 approach
+    // Tier 7 (y=16): Tower entry
+    // Tier 8 (y=5):  Throne + final
+    $map_nodes = [
+        // Tier 1 — bottom
+        ['node_01', 'Ruined Temple',     '&#9961;',  40, 92],
+        // Tier 2
+        ['node_02', 'First Shard',       '&#10070;', 22, 80],
+        // Tier 3
+        ['node_03', 'Crossroads',        '&#10010;', 50, 68],
+        // Tier 4 — three branches spread wide
+        ['node_06', 'Sable',             '&#9830;',  15, 56],
+        ['node_04', 'Ember Keep',        '&#9876;',  50, 56],
+        ['node_05', 'Ice Caves',         '&#10052;', 85, 56],
+        // Tier 5
+        ['node_10', 'Revelation',        '&#9790;',  15, 44],
+        ['node_08', 'Broker\'s Path',    '&#9758;',  38, 44],
+        ['node_07', 'Inside Keep',       '&#9733;',  62, 44],
+        ['node_09', 'Frozen Sanctum',    '&#10052;', 85, 44],
+        // Tier 6
+        ['node_11', 'Ridge Road',        '&#9650;',  50, 33],
+        // Tier 7 — two entry points
+        ['node_12', 'Tower Gate',        '&#9608;',  32, 23],
+        ['node_13', 'Hidden Entry',      '&#9608;',  68, 23],
+        // Tier 8 — throne room
+        ['node_14', 'Throne Room',       '&#9813;',  50, 14],
+        // Tier 9 — final confrontations
+        ['node_15', 'The Duel',          '&#9876;',  22, 5],
+        ['node_16', 'Ritual Collapse',   '&#10026;', 50, 5],
+        ['node_17', 'Silent Strike',     '&#128065;',78, 5],
     ];
 
-    // Connections between landmarks
-    $connections = [
-        ['ruined_temple', 'crossroads'],
-        ['crossroads',    'ice_caves'],
-        ['crossroads',    'ember_keep'],
-        ['ice_caves',     'ridge_road'],
-        ['ember_keep',    'ridge_road'],
-        ['ridge_road',    'malachar_tower'],
-    ];
-
-    // Determine state of each landmark
-    $landmark_map = [];
-    foreach ($landmarks as &$lm) {
-        $lm['state'] = 'hidden';
-        foreach ($lm['nodes'] as $nid) {
-            if ($nid === $node_id) { $lm['state'] = 'current'; break; }
-            if (in_array($nid, $visited, true)) { $lm['state'] = 'visited'; }
-        }
-        $landmark_map[$lm['id']] = $lm;
+    // Build coordinate lookup
+    $coords = [];
+    foreach ($map_nodes as $mn) {
+        $coords[$mn[0]] = ['x' => $mn[3], 'y' => $mn[4]];
     }
-    unset($lm);
+
+    // Connections follow actual story branching
+    $map_edges = [
+        ['node_01','node_02'], ['node_01','node_03'],
+        ['node_02','node_03'],
+        ['node_03','node_04'], ['node_03','node_05'], ['node_03','node_06'],
+        ['node_06','node_10'], ['node_06','node_04'],
+        ['node_04','node_07'], ['node_04','node_08'],
+        ['node_08','node_07'],
+        ['node_05','node_09'],
+        ['node_10','node_04'], ['node_10','node_11'],
+        ['node_07','node_11'], ['node_09','node_11'],
+        ['node_11','node_12'], ['node_11','node_13'],
+        ['node_12','node_14'], ['node_13','node_14'],
+        ['node_14','node_15'], ['node_14','node_16'], ['node_14','node_17'],
+    ];
     ?>
     <aside class="game-map">
         <div class="map-header">
@@ -224,29 +216,34 @@ $body_class = 'page-game';
             <span class="map-region">VALDRIS</span>
         </div>
         <div class="map-canvas">
-            <!-- Connection lines -->
-            <svg class="map-lines" viewBox="0 0 100 90" preserveAspectRatio="none">
-                <?php foreach ($connections as $conn): ?>
+            <svg class="map-lines" viewBox="0 0 100 95" preserveAspectRatio="none">
+                <?php foreach ($map_edges as $e): ?>
                     <?php
-                        $a = $landmark_map[$conn[0]];
-                        $b = $landmark_map[$conn[1]];
-                        $line_vis = ($a['state'] !== 'hidden' || $b['state'] !== 'hidden') ? 'visible' : 'faded';
+                        $a_vis = in_array($e[0], $visited, true) || $e[0] === $node_id;
+                        $b_vis = in_array($e[1], $visited, true) || $e[1] === $node_id;
+                        $cls = ($a_vis && $b_vis) ? 'map-line-walked'
+                             : (($a_vis || $b_vis) ? 'map-line-visible' : 'map-line-faded');
                     ?>
-                    <line class="map-line-<?= $line_vis ?>"
-                          x1="<?= $a['x'] ?>" y1="<?= $a['y'] ?>"
-                          x2="<?= $b['x'] ?>" y2="<?= $b['y'] ?>" />
+                    <line class="<?= $cls ?>"
+                          x1="<?= $coords[$e[0]]['x'] ?>" y1="<?= $coords[$e[0]]['y'] ?>"
+                          x2="<?= $coords[$e[1]]['x'] ?>" y2="<?= $coords[$e[1]]['y'] ?>" />
                 <?php endforeach; ?>
             </svg>
 
-            <!-- Landmark nodes -->
-            <?php foreach ($landmarks as $lm): ?>
-                <div class="map-node <?= $lm['state'] ?>" style="left:<?= $lm['x'] ?>%;top:<?= $lm['y'] ?>%">
-                    <span class="map-icon"><?= $lm['icon'] ?></span>
-                    <?php if ($lm['state'] === 'current'): ?>
+            <?php foreach ($map_nodes as $mn): ?>
+                <?php
+                    [$mid, $mlabel, $micon, $mx, $my] = $mn;
+                    $is_current = ($mid === $node_id);
+                    $is_visited = in_array($mid, $visited, true);
+                    $state = $is_current ? 'current' : ($is_visited ? 'visited' : 'hidden');
+                ?>
+                <div class="map-node <?= $state ?>" style="left:<?= $mx ?>%;top:<?= $my ?>%">
+                    <span class="map-icon"><?= $micon ?></span>
+                    <?php if ($is_current): ?>
                         <span class="map-badge">CURRENT</span>
                     <?php endif; ?>
-                    <?php if ($lm['state'] !== 'hidden'): ?>
-                        <span class="map-label"><?= clean($lm['label']) ?></span>
+                    <?php if ($is_current || $is_visited): ?>
+                        <span class="map-label"><?= clean($mlabel) ?></span>
                     <?php else: ?>
                         <span class="map-label dim">???</span>
                     <?php endif; ?>
@@ -255,14 +252,6 @@ $body_class = 'page-game';
         </div>
 
         <div class="map-footer">
-            <?php if (!empty($hero['inventory'])): ?>
-            <div class="map-inv">
-                <span class="map-inv-title">Relics</span>
-                <?php foreach ($hero['inventory'] as $item): ?>
-                    <span class="map-inv-item">&#9670; <?= clean($item) ?></span>
-                <?php endforeach; ?>
-            </div>
-            <?php endif; ?>
             <a href="logout.php" class="map-quit">&#8617; Quit</a>
         </div>
     </aside>
@@ -321,6 +310,15 @@ $body_class = 'page-game';
                 </form>
             <?php endif; ?>
         <?php endforeach; ?>
+
+        <?php if (!empty($hero['inventory'])): ?>
+        <div class="choices-inv">
+            <span class="choices-inv-title">Relics</span>
+            <?php foreach ($hero['inventory'] as $item): ?>
+                <span class="choices-inv-item">&#9670; <?= clean($item) ?></span>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
     </aside>
 
 </div>

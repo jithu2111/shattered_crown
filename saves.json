@@ -1,33 +1,24 @@
 {
     "Jithu": {
         "hero": {
-            "name": "loo",
-            "class": "warrior",
-            "hp": 35,
-            "str": 33,
-            "wis": 15,
+            "name": "loose",
+            "class": "mage",
+            "hp": 70,
+            "str": 10,
+            "wis": 35,
             "inventory": [
                 "Ember Fragment",
-                "Sable's Map",
-                "Crown Shard: Ember",
-                "Healing Draught",
-                "Crown Shard: Shadow"
+                "Lost Litany Scroll"
             ],
-            "score": 750,
+            "score": 600,
             "nodes_visited": [
                 "node_01",
                 "node_02",
                 "node_03",
-                "node_06",
-                "node_10",
-                "node_04",
-                "node_07",
-                "node_11",
-                "node_13",
-                "node_14"
+                "node_04"
             ]
         },
-        "node": "node_15",
+        "node": "node_08",
         "choices_log": [
             {
                 "node": "node_01",
@@ -36,70 +27,30 @@
             },
             {
                 "node": "node_02",
-                "choice": "Pocket the shard and move on",
+                "choice": "Study the inscription on the altar base",
                 "title": "The First Shard"
             },
             {
                 "node": "node_03",
-                "choice": "Wait at the signpost \u2014 someone is watching",
+                "choice": "North \u2014 toward Ember Keep",
                 "title": "The Crossroads"
             },
             {
-                "node": "node_06",
-                "choice": "Negotiate",
-                "title": "Sable, the Shadow Broker"
-            },
-            {
-                "node": "node_10",
-                "choice": "Head to Ember Keep first",
-                "title": "Sable's Revelation"
-            },
-            {
                 "node": "node_04",
-                "choice": "Storm the gates",
+                "choice": "Seek the Broker's hidden route",
                 "title": "Ember Keep Gates"
-            },
-            {
-                "node": "node_07",
-                "choice": "Destroy the golem head-on",
-                "title": "Inside Ember Keep"
-            },
-            {
-                "node": "node_11",
-                "choice": "Use Sable's Map to find the hidden entrance",
-                "title": "The Ridge Road"
-            },
-            {
-                "node": "node_13",
-                "choice": "Search the cellar for supplies",
-                "title": "Malachar's Tower \u2014 Hidden Entry"
-            },
-            {
-                "node": "node_14",
-                "choice": "Challenge Malachar directly",
-                "title": "The Throne Room of Valdris"
             }
         ],
         "locked_log": [
-            "node_02:read_inscription",
-            "node_04:broker_route",
-            "node_07:disable_golem",
-            "node_14:disrupt_ritual",
-            "node_14:shadow_strike"
+            "node_04:storm_gates"
         ],
-        "alignment": 9,
+        "alignment": 3,
         "alignment_history": [
             1,
-            1,
-            1,
-            2,
             3,
-            5,
-            7,
-            6,
-            6,
-            9
+            4,
+            3
         ],
-        "saved_at": "2026-04-16T05:19:29+00:00"
+        "saved_at": "2026-04-16T08:19:44+00:00"
     }
 }

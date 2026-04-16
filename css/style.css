@@ -527,7 +527,7 @@ a:hover { color: var(--gold-soft); }
 
 .game-layout {
     display: grid;
-    grid-template-columns: 280px 1fr 320px;
+    grid-template-columns: 340px 1fr 320px;
     flex: 1;
     overflow: hidden;
 }
@@ -540,18 +540,22 @@ a:hover { color: var(--gold-soft); }
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative;
 }
 
 .map-header {
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1.25rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
 }
 
 .map-brand {
     display: block;
     font-family: 'Cinzel', serif;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--gold);
     letter-spacing: 0.12em;
 }
@@ -559,17 +563,17 @@ a:hover { color: var(--gold-soft); }
 .map-region {
     display: block;
     font-family: 'Cinzel', serif;
-    font-size: 0.55rem;
+    font-size: 0.5rem;
     letter-spacing: 0.28em;
     color: var(--muted);
-    margin-top: 0.15rem;
+    margin-top: 0.1rem;
 }
 
 .map-canvas {
     flex: 1;
     position: relative;
-    padding: 2.5rem 1.5rem;
-    overflow: hidden;
+    padding: 3.5rem 2rem 2.5rem 2rem;
+    overflow: visible;
     background:
         radial-gradient(ellipse at 30% 70%, rgba(200, 160, 40, 0.04) 0%, transparent 50%),
         radial-gradient(ellipse at 70% 30%, rgba(155, 0, 0, 0.04) 0%, transparent 50%);
@@ -577,22 +581,27 @@ a:hover { color: var(--gold-soft); }
 
 .map-lines {
     position: absolute;
-    inset: 2rem 1rem;
-    width: calc(100% - 2rem);
-    height: calc(100% - 4rem);
+    inset: 3.5rem 2rem 2.5rem 2rem;
+    width: calc(100% - 4rem);
+    height: calc(100% - 6rem);
     pointer-events: none;
 }
 
+.map-line-walked {
+    stroke: rgba(200, 160, 40, 0.45);
+    stroke-width: 0.6;
+}
+
 .map-line-visible {
-    stroke: rgba(200, 160, 40, 0.3);
-    stroke-width: 0.5;
+    stroke: rgba(200, 160, 40, 0.2);
+    stroke-width: 0.4;
     stroke-dasharray: 2 1.5;
 }
 
 .map-line-faded {
-    stroke: rgba(100, 80, 50, 0.1);
-    stroke-width: 0.3;
-    stroke-dasharray: 1 2;
+    stroke: rgba(100, 80, 50, 0.07);
+    stroke-width: 0.25;
+    stroke-dasharray: 1 2.5;
 }
 
 .map-node {
@@ -662,13 +671,16 @@ a:hover { color: var(--gold-soft); }
 }
 
 .map-footer {
-    padding: 0.75rem 1.25rem;
-    border-top: 1px solid var(--border);
-    margin-top: auto;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.6rem 1.25rem;
+    z-index: 2;
 }
 
 .map-inv {
-    margin-bottom: 0.5rem;
+    display: none;
 }
 
 .map-inv-title {
@@ -861,6 +873,35 @@ a:hover { color: var(--gold-soft); }
     top: 0.75rem;
     right: 0.75rem;
     font-size: 0.85rem;
+}
+
+/* ── RIGHT COLUMN: RELICS ──────────────────────── */
+
+.choices-inv {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+}
+
+.choices-inv-title {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+}
+
+.choices-inv-item {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--parchment);
+    padding: 0.2rem 0;
+}
+
+.choices-inv-item::first-letter {
+    color: var(--gold);
 }
 
 /* ── RESPONSIVE ────────────────────────────────── */
