@@ -22,7 +22,8 @@ $body_class = $body_class ?? '';
     <div class="header-meta">
         <span class="meta-line">14 DAYS UNTIL ECLIPSE</span>
         <?php if (isset($_SESSION['user'])): ?>
-            <a href="logout.php" class="header-logout">&#8617; Logout</a>
+            <a href="leaderboard.php" class="header-nav-link">&#9733; Hall of Legends</a>
+            <a href="logout.php" class="header-nav-link">&#8617; Logout</a>
         <?php endif; ?>
     </div>
 </header>

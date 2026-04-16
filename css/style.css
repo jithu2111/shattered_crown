@@ -92,7 +92,7 @@ a:hover { color: var(--gold-soft); }
     gap: 1.5rem;
 }
 
-.header-logout {
+.header-nav-link {
     font-size: 0.62rem;
     letter-spacing: 0.14em;
     color: var(--muted);
@@ -100,7 +100,7 @@ a:hover { color: var(--gold-soft); }
     transition: color 0.15s ease;
 }
 
-.header-logout:hover { color: var(--gold); }
+.header-nav-link:hover { color: var(--gold); }
 
 .meta-line {
     color: var(--crimson-hot);
