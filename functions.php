@@ -2,6 +2,7 @@
 
 const USERS_FILE  = __DIR__ . '/users.json';
 const SCORES_FILE = __DIR__ . '/scores.json';
+const SAVES_FILE  = __DIR__ . '/saves.json';
 
 function loadUsers(): array {
     if (!file_exists(USERS_FILE)) return [];
@@ -53,7 +54,68 @@ function clean(string $v): string {
     return htmlspecialchars(trim($v), ENT_QUOTES, 'UTF-8');
 }
 
+function getNodeText(array $node, string $class): string {
+    $key = 'text_' . $class;
+    return $node[$key] ?? $node['text_warrior'];
+}
+
+function applyStatChanges(array $changes): void {
+    foreach ($changes as $stat => $delta) {
+        if (isset($_SESSION['hero'][$stat])) {
+            $_SESSION['hero'][$stat] += $delta;
+        }
+    }
+}
+
+function isDead(): bool {
+    return ($_SESSION['hero']['hp'] ?? 1) <= 0;
+}
+
+function canChoose(array $choice): bool {
+    if ($choice['required_stat'] !== null) {
+        $val = $_SESSION['hero'][$choice['required_stat']] ?? 0;
+        if ($val < $choice['required_val']) return false;
+    }
+    if ($choice['required_item'] !== null) {
+        if (!in_array($choice['required_item'], $_SESSION['hero']['inventory'] ?? [], true)) return false;
+    }
+    return true;
+}
+
+function getLockReason(array $choice): string {
+    if ($choice['required_stat'] !== null) {
+        $have = $_SESSION['hero'][$choice['required_stat']] ?? 0;
+        $need = $choice['required_val'];
+        $stat = strtoupper($choice['required_stat']);
+        return "Requires $stat $need — you have $have";
+    }
+    if ($choice['required_item'] !== null) {
+        return "Requires: " . $choice['required_item'];
+    }
+    return 'Locked';
+}
+
+function getAlignmentHint(int $score): string {
+    if ($score >= 10) return 'The light of Valdris burns bright within you. A heroic fate beckons.';
+    if ($score >= 5)  return 'Your path leans toward the just. The Crown may yet be restored.';
+    if ($score >= 0)  return 'The scales are balanced. Your next choice will tip them.';
+    if ($score >= -5) return 'Shadows gather at the edges of your vision. Be wary of the dark.';
+    return 'The eclipse whispers your name. Power — or ruin — awaits.';
+}
+
+function calculateScore(): int {
+    $hero = $_SESSION['hero'];
+    $base = $hero['score'] ?? 500;
+    $visited_bonus = count($hero['nodes_visited'] ?? []) * 25;
+    $inventory_bonus = count($hero['inventory'] ?? []) * 15;
+    $alignment = abs($_SESSION['alignment'] ?? 0) * 10;
+    return $base + $visited_bonus + $inventory_bonus + $alignment;
+}
+
 function resetGame(): void {
+    if (isset($_SESSION['user'])) {
+        deleteSave($_SESSION['user']);
+    }
     unset(
         $_SESSION['hero'],
         $_SESSION['node'],
@@ -63,4 +125,53 @@ function resetGame(): void {
         $_SESSION['alignment_history']
     );
     setcookie('sc_node', '', time() - 3600, '/');
+}
+
+// ── SAVE / LOAD GAME ──────────────────────────────
+
+function loadAllSaves(): array {
+    if (!file_exists(SAVES_FILE)) return [];
+    $raw = file_get_contents(SAVES_FILE);
+    $data = json_decode($raw, true);
+    return is_array($data) ? $data : [];
+}
+
+function saveAllSaves(array $saves): void {
+    file_put_contents(SAVES_FILE, json_encode($saves, JSON_PRETTY_PRINT), LOCK_EX);
+}
+
+function saveGame(): void {
+    if (!isset($_SESSION['user'], $_SESSION['hero'], $_SESSION['node'])) return;
+
+    $saves = loadAllSaves();
+    $saves[$_SESSION['user']] = [
+        'hero'              => $_SESSION['hero'],
+        'node'              => $_SESSION['node'],
+        'choices_log'       => $_SESSION['choices_log'] ?? [],
+        'locked_log'        => $_SESSION['locked_log'] ?? [],
+        'alignment'         => $_SESSION['alignment'] ?? 0,
+        'alignment_history' => $_SESSION['alignment_history'] ?? [],
+        'saved_at'          => date('c'),
+    ];
+    saveAllSaves($saves);
+}
+
+function loadSave(string $username): ?array {
+    $saves = loadAllSaves();
+    return $saves[$username] ?? null;
+}
+
+function restoreSave(array $save): void {
+    $_SESSION['hero']              = $save['hero'];
+    $_SESSION['node']              = $save['node'];
+    $_SESSION['choices_log']       = $save['choices_log'] ?? [];
+    $_SESSION['locked_log']        = $save['locked_log'] ?? [];
+    $_SESSION['alignment']         = $save['alignment'] ?? 0;
+    $_SESSION['alignment_history'] = $save['alignment_history'] ?? [];
+}
+
+function deleteSave(string $username): void {
+    $saves = loadAllSaves();
+    unset($saves[$username]);
+    saveAllSaves($saves);
 }

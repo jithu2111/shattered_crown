@@ -87,7 +87,20 @@ a:hover { color: var(--gold-soft); }
     font-size: 0.72rem;
     letter-spacing: 0.24em;
     color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
+
+.header-nav-link {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.header-nav-link:hover { color: var(--gold); }
 
 .meta-line {
     color: var(--crimson-hot);
@@ -390,7 +403,1039 @@ a:hover { color: var(--gold-soft); }
     letter-spacing: 0.06em;
 }
 
+/* ── SAVE CARD ──────────────────────────────────── */
+
+.save-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-str);
+    border-radius: 4px;
+    padding: 2rem;
+    max-width: 480px;
+    margin: 0 auto 2rem;
+    text-align: left;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.save-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    margin: 0 0 1rem;
+}
+
+.save-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 1.5rem;
+}
+
+.save-hero {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: var(--parchment);
+    font-weight: 700;
+}
+
+.save-meta {
+    font-size: 0.88rem;
+    color: var(--parchment);
+}
+
+.save-location {
+    font-size: 0.82rem;
+    font-style: italic;
+    color: var(--gold-soft);
+}
+
+.save-time {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+}
+
+.save-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.save-actions .btn {
+    flex: 1;
+    font-size: 0.75rem;
+    padding: 0.75rem 1rem;
+}
+
+/* ── GAME UI ────────────────────────────────────── */
+
+.page-game {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.game-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.5rem;
+    background: rgba(10, 10, 10, 0.85);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(6px);
+    flex-shrink: 0;
+}
+
+.bar-brand {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+}
+
+.bar-stats {
+    display: flex;
+    gap: 2rem;
+}
+
+.bar-stat {
+    text-align: center;
+}
+
+.bar-stat em {
+    display: block;
+    font-style: normal;
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+}
+
+.bar-stat strong {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--parchment);
+}
+
+.bar-eclipse {
+    text-align: right;
+}
+
+.bar-eclipse em {
+    display: block;
+    font-style: normal;
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.22em;
+    color: var(--crimson-hot);
+}
+
+.bar-eclipse strong {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    color: var(--parchment);
+}
+
+.game-layout {
+    display: grid;
+    grid-template-columns: 340px 1fr 320px;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* ── LEFT: WORLD MAP ───────────────────────────── */
+
+.game-map {
+    background: rgba(6, 6, 6, 0.85);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.map-header {
+    padding: 0.75rem 1.25rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.map-brand {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+}
+
+.map-region {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.28em;
+    color: var(--muted);
+    margin-top: 0.1rem;
+}
+
+.map-canvas {
+    flex: 1;
+    position: relative;
+    padding: 3.5rem 2rem 2.5rem 2rem;
+    overflow: visible;
+    background:
+        radial-gradient(ellipse at 30% 70%, rgba(200, 160, 40, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 30%, rgba(155, 0, 0, 0.04) 0%, transparent 50%);
+}
+
+.map-lines {
+    position: absolute;
+    inset: 3.5rem 2rem 2.5rem 2rem;
+    width: calc(100% - 4rem);
+    height: calc(100% - 6rem);
+    pointer-events: none;
+}
+
+.map-line-walked {
+    stroke: rgba(200, 160, 40, 0.45);
+    stroke-width: 0.6;
+}
+
+.map-line-visible {
+    stroke: rgba(200, 160, 40, 0.2);
+    stroke-width: 0.4;
+    stroke-dasharray: 2 1.5;
+}
+
+.map-line-faded {
+    stroke: rgba(100, 80, 50, 0.07);
+    stroke-width: 0.25;
+    stroke-dasharray: 1 2.5;
+}
+
+.map-node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1;
+}
+
+.map-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin: 0 auto 0.25rem;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    font-size: 1.1rem;
+    background: var(--bg-elev);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.map-node.current .map-icon {
+    border-color: var(--gold);
+    box-shadow: 0 0 14px rgba(200, 160, 40, 0.5), 0 0 28px rgba(200, 160, 40, 0.2);
+    background: rgba(200, 160, 40, 0.15);
+    transform: scale(1.1);
+}
+
+.map-node.visited .map-icon {
+    border-color: rgba(200, 160, 40, 0.4);
+    background: rgba(200, 160, 40, 0.06);
+}
+
+.map-node.hidden .map-icon {
+    border-color: rgba(100, 80, 50, 0.12);
+    opacity: 0.2;
+}
+
+.map-badge {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.44rem;
+    letter-spacing: 0.22em;
+    color: #1a1200;
+    background: var(--gold);
+    padding: 0.1rem 0.4rem;
+    border-radius: 2px;
+    margin: 0.2rem auto 0;
+    width: fit-content;
+}
+
+.map-label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    color: var(--parchment);
+    white-space: nowrap;
+    margin-top: 0.15rem;
+}
+
+.map-label.dim {
+    color: rgba(138, 127, 106, 0.25);
+    font-size: 0.5rem;
+}
+
+.map-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.6rem 1.25rem;
+    z-index: 2;
+}
+
+.map-inv {
+    display: none;
+}
+
+.map-inv-title {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+}
+
+.map-inv-item {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--parchment);
+    padding: 0.1rem 0;
+}
+
+.map-quit {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.3rem 0;
+    transition: color 0.15s ease;
+}
+
+.map-quit:hover { color: var(--gold); }
+
+/* ── MAIN STORY PANEL ──────────────────────────── */
+
+.game-main {
+    padding: 2rem 2.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.story-panel { flex: 1; }
+
+.node-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    text-transform: uppercase;
+    background: rgba(200, 160, 40, 0.06);
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+}
+
+.location-marker {
+    display: block;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    color: var(--crimson-hot);
+    margin-bottom: 0.25rem;
+}
+
+.story-title {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    margin-bottom: 1.5rem;
+}
+
+.class-insight {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.28em;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+}
+
+.story-text {
+    font-size: 1.1rem;
+    line-height: 1.75;
+    color: var(--parchment);
+    max-width: 620px;
+}
+
+.alignment-bar {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.alignment-label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.24em;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+}
+
+.alignment-hint {
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--gold-soft);
+}
+
+.ending-predictor {
+    margin-top: auto;
+    padding-top: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+}
+
+.predictor-icon { font-size: 1rem; }
+
+/* ── RIGHT: CHOICES ────────────────────────────── */
+
+.game-choices {
+    background: rgba(10, 10, 10, 0.4);
+    border-left: 1px solid var(--border);
+    padding: 1.25rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.choice-form { display: contents; }
+
+.choice-card {
+    display: block;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border-radius: 4px;
+    text-align: left;
+    font-family: 'EB Garamond', serif;
+    transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.choice-card.unlocked {
+    background: var(--bg-elev);
+    border: 1px solid var(--border-str);
+    color: var(--parchment);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.choice-card.unlocked:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 18px rgba(200, 160, 40, 0.15);
+}
+
+.choice-card.locked {
+    background: rgba(20, 16, 12, 0.4);
+    border: 1px solid rgba(100, 80, 50, 0.2);
+    color: var(--muted);
+    opacity: 0.6;
+    position: relative;
+}
+
+.choice-text {
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.choice-cost {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    color: var(--crimson-hot);
+    margin-top: 0.25rem;
+}
+
+.lock-reason {
+    display: block;
+    font-size: 0.75rem;
+    font-style: italic;
+    color: var(--crimson-hot);
+    margin-top: 0.2rem;
+}
+
+.lock-icon {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    font-size: 0.85rem;
+}
+
+/* ── RIGHT COLUMN: RELICS ──────────────────────── */
+
+.choices-inv {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+}
+
+.choices-inv-title {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+}
+
+.choices-inv-item {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--parchment);
+    padding: 0.2rem 0;
+}
+
+.choices-inv-item::first-letter {
+    color: var(--gold);
+}
+
+/* ── LEADERBOARD PAGE ──────────────────────────── */
+
+.page-leaderboard {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.lb-bar {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    background: rgba(10, 10, 10, 0.85);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(6px);
+    gap: 2rem;
+}
+
+.lb-bar-brand {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+}
+
+.lb-bar-nav {
+    display: flex;
+    gap: 1.5rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+}
+
+.lb-bar-nav a { color: var(--muted); text-decoration: none; }
+.lb-bar-nav a.active { color: var(--parchment); }
+.lb-bar-nav a:hover { color: var(--gold); }
+
+.lb-bar-logout {
+    margin-left: auto;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-decoration: none;
+}
+.lb-bar-logout:hover { color: var(--gold); }
+
+.lb-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+}
+
+.lb-sidebar {
+    background: rgba(6, 6, 6, 0.85);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem 1.25rem;
+}
+
+.lb-sidebar-label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+}
+
+.lb-sidebar-nav { display: flex; flex-direction: column; gap: 0.25rem; }
+
+.lb-nav-link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    border-radius: 3px;
+    text-decoration: none;
+}
+.lb-nav-link.active { background: rgba(200, 160, 40, 0.12); color: var(--gold); border-left: 2px solid var(--gold); }
+
+.lb-main {
+    padding: 2.5rem 3rem;
+    overflow-y: auto;
+}
+
+.lb-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-style: italic;
+    margin-bottom: 2rem;
+}
+
+.lb-summary {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.lb-summary-card {
+    background: rgba(234, 224, 202, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem 1.5rem;
+    min-width: 140px;
+    text-align: center;
+}
+
+.lb-summary-label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+}
+
+.lb-summary-value {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    color: var(--parchment);
+}
+
+.lb-section {
+    margin-bottom: 2.5rem;
+}
+
+.lb-section-title {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--gold-soft);
+}
+
+.lb-table-wrap {
+    overflow-x: auto;
+}
+
+.lb-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+}
+
+.lb-table thead th {
+    font-family: 'Cinzel', serif;
+    font-size: 0.52rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.lb-table tbody tr {
+    border-bottom: 1px solid rgba(200, 160, 40, 0.06);
+    transition: background 0.15s ease;
+}
+
+.lb-table tbody tr:hover {
+    background: rgba(200, 160, 40, 0.04);
+}
+
+.lb-table tbody td {
+    padding: 0.7rem 0.75rem;
+    color: var(--parchment);
+}
+
+.rank { text-align: center; width: 50px; }
+.rank-crown { color: var(--gold); font-size: 1.2rem; }
+.rank-silver { color: #c0c0c0; font-size: 1rem; }
+.rank-bronze { color: #cd7f32; font-size: 1rem; }
+
+.hero-cell { font-weight: 500; }
+.persona-cell { font-style: italic; color: var(--gold-soft); }
+.score-cell { font-family: 'Cinzel', serif; font-weight: 700; color: var(--gold); }
+.date-cell { font-size: 0.82rem; color: var(--muted); }
+.player-cell { color: var(--parchment); }
+
+.lb-row-you {
+    background: rgba(200, 160, 40, 0.06);
+}
+
+.ending-tag {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.16em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+}
+
+.ending-tag-heroic { background: rgba(127, 176, 105, 0.15); color: var(--success); border: 1px solid rgba(127, 176, 105, 0.3); }
+.ending-tag-secret { background: rgba(106, 169, 230, 0.15); color: var(--blue-ice); border: 1px solid rgba(106, 169, 230, 0.3); }
+.ending-tag-tragic { background: rgba(196, 30, 58, 0.15); color: var(--crimson-hot); border: 1px solid rgba(196, 30, 58, 0.3); }
+.ending-tag-death  { background: rgba(196, 30, 58, 0.1);  color: #ff8a8a;          border: 1px solid rgba(196, 30, 58, 0.2); }
+
+.lb-empty {
+    font-style: italic;
+    color: var(--muted);
+    padding: 2rem 0;
+}
+
+.lb-actions {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.lb-actions .btn { width: auto; min-width: 160px; }
+
+/* ── ENDING PAGE ────────────────────────────────── */
+
+.page-ending {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.ending-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    min-height: 100vh;
+}
+
+.ending-narrative {
+    padding: 3rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.ending-sidebar-label {
+    position: absolute;
+    left: 1.5rem;
+    top: 50%;
+    transform: rotate(-90deg) translateX(-50%);
+    transform-origin: left center;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.35em;
+    color: var(--muted);
+}
+
+.ending-outcome {
+    margin-bottom: 1rem;
+}
+
+.outcome-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.28em;
+    color: var(--muted);
+}
+
+.ending-heroic .outcome-line { color: var(--gold-soft); }
+.ending-tragic .outcome-line { color: var(--crimson-hot); }
+.ending-secret .outcome-line { color: var(--blue-ice); }
+.ending-death .outcome-line  { color: var(--crimson-hot); }
+
+.ending-headline {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    line-height: 1.05;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+}
+
+.ending-heroic .ending-headline { color: var(--parchment); }
+.ending-tragic .ending-headline { color: var(--crimson-hot); }
+.ending-secret .ending-headline { color: var(--blue-ice); }
+.ending-death .ending-headline  { color: var(--crimson-hot); }
+
+.ending-story {
+    max-width: 540px;
+    margin-bottom: 1.5rem;
+}
+
+.ending-story-main {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    font-style: italic;
+    color: var(--parchment);
+}
+
+.ending-epilogue {
+    max-width: 540px;
+    margin-bottom: 2.5rem;
+}
+
+.ending-epilogue p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--muted);
+}
+
+.ending-actions {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+}
+
+.ending-actions .btn {
+    width: auto;
+    min-width: 180px;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: var(--parchment);
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0.9rem 1.5rem;
+}
+
+.btn-link:hover { color: var(--gold); }
+
+/* ── ENDING STATS COLUMN ───────────────────────── */
+
+.ending-stats {
+    background: rgba(234, 224, 202, 0.06);
+    border-left: 1px solid var(--border);
+    padding: 2rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    justify-content: center;
+    overflow-y: auto;
+}
+
+.stat-card {
+    background: rgba(234, 224, 202, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.25rem;
+}
+
+.stat-card-label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.24em;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+}
+
+.stat-card-value {
+    display: block;
+}
+
+.persona-name {
+    font-family: 'Cinzel', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--parchment);
+}
+
+.score-value {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: var(--gold);
+    text-align: right;
+}
+
+.stat-card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.stat-card-right { text-align: right; }
+
+.stat-card-persona { margin-bottom: 0; }
+
+.persona-bars {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.persona-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bar-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.42rem;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    min-width: 55px;
+}
+
+.bar-name:last-child { text-align: right; }
+
+.bar-track {
+    flex: 1;
+    height: 4px;
+    background: rgba(234, 224, 202, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+}
+
+.bar-mercy    { background: linear-gradient(90deg, var(--blue-ice), var(--gold)); }
+.bar-strategy { background: linear-gradient(90deg, var(--gold-soft), var(--crimson-hot)); }
+
+.stat-card-pair {
+    gap: 1rem;
+}
+
+.stat-card-pair .stat-card {
+    flex: 1;
+    text-align: center;
+}
+
+.stat-card-big {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    color: var(--parchment);
+    line-height: 1;
+    margin-top: 0.3rem;
+}
+
+.stat-card-big sup {
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.stat-card-hero { }
+
+.stat-hero-name {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--parchment);
+}
+
+.stat-hero-class {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+}
+
+.stat-hero-stats {
+    display: flex;
+    gap: 1.25rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: var(--parchment);
+}
+
+.stat-card-relics { }
+
+.relic-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid rgba(200, 160, 40, 0.06);
+}
+
+.relic-icon {
+    color: var(--gold);
+    font-size: 0.7rem;
+}
+
+.relic-name {
+    font-size: 0.88rem;
+    color: var(--parchment);
+}
+
 /* ── RESPONSIVE ────────────────────────────────── */
+
+@media (max-width: 960px) {
+    .game-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+    }
+    .game-map { display: none; }
+    .game-choices {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        max-height: 40vh;
+    }
+    .bar-stats { gap: 1rem; }
+    .bar-eclipse { display: none; }
+    .ending-layout {
+        grid-template-columns: 1fr;
+    }
+    .ending-narrative { padding: 2rem 1.5rem; }
+    .ending-stats { border-left: none; border-top: 1px solid var(--border); }
+    .ending-sidebar-label { display: none; }
+    .lb-layout { grid-template-columns: 1fr; }
+    .lb-sidebar { display: none; }
+    .lb-main { padding: 1.5rem; }
+    .lb-summary { flex-wrap: wrap; }
+}
 
 @media (max-width: 600px) {
     .site-header { padding: 1rem; flex-direction: column; gap: 0.5rem; }
@@ -398,4 +1443,10 @@ a:hover { color: var(--gold-soft); }
     .site-main { padding: 2rem 1rem; }
     .class-stats { padding-left: 0; justify-content: center; }
     .class-header { justify-content: center; text-align: center; }
+    .game-bar { padding: 0.5rem 0.75rem; flex-wrap: wrap; gap: 0.5rem; }
+    .game-main { padding: 1.25rem; }
+    .ending-narrative { padding: 1.5rem 1rem; }
+    .ending-headline { font-size: 2rem; }
+    .ending-actions { flex-direction: column; }
+    .ending-actions .btn { width: 100%; }
 }
