@@ -390,7 +390,370 @@ a:hover { color: var(--gold-soft); }
     letter-spacing: 0.06em;
 }
 
+/* ── GAME UI ────────────────────────────────────── */
+
+.page-game {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.game-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.5rem;
+    background: rgba(10, 10, 10, 0.85);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(6px);
+    flex-shrink: 0;
+}
+
+.bar-brand {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+}
+
+.bar-stats {
+    display: flex;
+    gap: 2rem;
+}
+
+.bar-stat {
+    text-align: center;
+}
+
+.bar-stat em {
+    display: block;
+    font-style: normal;
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+}
+
+.bar-stat strong {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--parchment);
+}
+
+.bar-eclipse {
+    text-align: right;
+}
+
+.bar-eclipse em {
+    display: block;
+    font-style: normal;
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.22em;
+    color: var(--crimson-hot);
+}
+
+.bar-eclipse strong {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    color: var(--parchment);
+}
+
+.game-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr 320px;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* ── LEFT SIDEBAR ──────────────────────────────── */
+
+.game-sidebar {
+    background: rgba(10, 10, 10, 0.6);
+    border-right: 1px solid var(--border);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.sidebar-section { margin-bottom: 1.25rem; }
+
+.sidebar-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.28em;
+    color: var(--parchment);
+    text-transform: uppercase;
+    margin: 0 0 0.25rem;
+}
+
+.sidebar-heading-sm {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 0.5rem;
+}
+
+.sidebar-sub {
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    border-radius: 3px;
+    transition: background 0.15s ease, color 0.15s ease;
+    text-decoration: none;
+}
+
+.sidebar-link:hover { background: rgba(200, 160, 40, 0.08); color: var(--parchment); }
+.sidebar-link.active { background: rgba(200, 160, 40, 0.12); color: var(--gold); border-left: 2px solid var(--gold); }
+.sidebar-link.dim { color: var(--muted); margin-top: auto; }
+
+.path-log { max-height: 200px; overflow-y: auto; }
+
+.path-entry {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(200, 160, 40, 0.06);
+}
+
+.path-node {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    color: var(--gold-soft);
+}
+
+.path-choice {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+}
+
+.inv-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.inv-list li {
+    padding: 0.3rem 0;
+    font-size: 0.82rem;
+    color: var(--parchment);
+    border-bottom: 1px solid rgba(200, 160, 40, 0.06);
+}
+
+.inv-list li::before {
+    content: "\25C6 ";
+    color: var(--gold);
+    font-size: 0.6rem;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding-top: 1rem;
+}
+
+/* ── MAIN STORY PANEL ──────────────────────────── */
+
+.game-main {
+    padding: 2rem 2.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.story-panel { flex: 1; }
+
+.node-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    text-transform: uppercase;
+    background: rgba(200, 160, 40, 0.06);
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+}
+
+.location-marker {
+    display: block;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    color: var(--crimson-hot);
+    margin-bottom: 0.25rem;
+}
+
+.story-title {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    margin-bottom: 1.5rem;
+}
+
+.class-insight {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.28em;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+}
+
+.story-text {
+    font-size: 1.1rem;
+    line-height: 1.75;
+    color: var(--parchment);
+    max-width: 620px;
+}
+
+.alignment-bar {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.alignment-label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.24em;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+}
+
+.alignment-hint {
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--gold-soft);
+}
+
+.ending-predictor {
+    margin-top: auto;
+    padding-top: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+}
+
+.predictor-icon { font-size: 1rem; }
+
+/* ── RIGHT: CHOICES ────────────────────────────── */
+
+.game-choices {
+    background: rgba(10, 10, 10, 0.4);
+    border-left: 1px solid var(--border);
+    padding: 1.25rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.choice-form { display: contents; }
+
+.choice-card {
+    display: block;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border-radius: 4px;
+    text-align: left;
+    font-family: 'EB Garamond', serif;
+    transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.choice-card.unlocked {
+    background: var(--bg-elev);
+    border: 1px solid var(--border-str);
+    color: var(--parchment);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.choice-card.unlocked:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 18px rgba(200, 160, 40, 0.15);
+}
+
+.choice-card.locked {
+    background: rgba(20, 16, 12, 0.4);
+    border: 1px solid rgba(100, 80, 50, 0.2);
+    color: var(--muted);
+    opacity: 0.6;
+    position: relative;
+}
+
+.choice-text {
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.choice-cost {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    color: var(--crimson-hot);
+    margin-top: 0.25rem;
+}
+
+.lock-reason {
+    display: block;
+    font-size: 0.75rem;
+    font-style: italic;
+    color: var(--crimson-hot);
+    margin-top: 0.2rem;
+}
+
+.lock-icon {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    font-size: 0.85rem;
+}
+
 /* ── RESPONSIVE ────────────────────────────────── */
+
+@media (max-width: 960px) {
+    .game-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+    }
+    .game-sidebar { display: none; }
+    .game-choices {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        max-height: 40vh;
+    }
+    .bar-stats { gap: 1rem; }
+    .bar-eclipse { display: none; }
+}
 
 @media (max-width: 600px) {
     .site-header { padding: 1rem; flex-direction: column; gap: 0.5rem; }
@@ -398,4 +761,6 @@ a:hover { color: var(--gold-soft); }
     .site-main { padding: 2rem 1rem; }
     .class-stats { padding-left: 0; justify-content: center; }
     .class-header { justify-content: center; text-align: center; }
+    .game-bar { padding: 0.5rem 0.75rem; flex-wrap: wrap; gap: 0.5rem; }
+    .game-main { padding: 1.25rem; }
 }
