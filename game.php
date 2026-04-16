@@ -149,42 +149,74 @@ $body_class = 'page-game';
     <!-- ── LEFT: WORLD MAP ──────────────────────── -->
     <?php
     $visited = $hero['nodes_visited'] ?? [];
-    $map_locations = [
-        // [id, label, x%, y%, icon]
-        ['node_01',              'Ruined Temple',       30, 72, '&#9961;'],
-        ['node_02',              'First Shard',         18, 62, '&#10070;'],
-        ['node_03',              'Crossroads',          50, 58, '&#10010;'],
-        ['node_05',              'Ice Caves',           72, 68, '&#10052;'],
-        ['node_06',              'Sable',               38, 48, '&#9830;'],
-        ['node_04',              'Ember Keep',          55, 38, '&#9876;'],
-        ['node_08',              'Broker\'s Passage',   40, 32, '&#9758;'],
-        ['node_07',              'Inside Keep',         62, 28, '&#9733;'],
-        ['node_09',              'Frozen Sanctum',      78, 50, '&#10052;'],
-        ['node_10',              'Sable\'s Revelation', 32, 38, '&#9790;'],
-        ['node_11',              'Ridge Road',          52, 22, '&#9650;'],
-        ['node_12',              'Tower Gate',          42, 14, '&#9608;'],
-        ['node_13',              'Hidden Entry',        62, 14, '&#9608;'],
-        ['node_14',              'Throne Room',         52,  6, '&#9813;'],
-        ['node_15',              'The Duel',            40,  0, '&#9876;'],
-        ['node_16',              'Ritual Collapse',     52,  0, '&#10026;'],
-        ['node_17',              'Silent Strike',       64,  0, '&#128065;'],
+
+    // 6 major landmarks — each maps to a group of story nodes
+    $landmarks = [
+        [
+            'id'    => 'ruined_temple',
+            'label' => 'Ruined Temple',
+            'icon'  => '&#9961;',
+            'nodes' => ['node_01', 'node_02'],
+            'x' => 38, 'y' => 82,
+        ],
+        [
+            'id'    => 'crossroads',
+            'label' => 'Crossroads',
+            'icon'  => '&#10010;',
+            'nodes' => ['node_03', 'node_06', 'node_10'],
+            'x' => 55, 'y' => 62,
+        ],
+        [
+            'id'    => 'ice_caves',
+            'label' => 'Ice Caves',
+            'icon'  => '&#10052;',
+            'nodes' => ['node_05', 'node_09'],
+            'x' => 78, 'y' => 72,
+        ],
+        [
+            'id'    => 'ember_keep',
+            'label' => 'Ember Keep',
+            'icon'  => '&#9876;',
+            'nodes' => ['node_04', 'node_07', 'node_08'],
+            'x' => 60, 'y' => 40,
+        ],
+        [
+            'id'    => 'ridge_road',
+            'label' => 'The Ridge',
+            'icon'  => '&#9650;',
+            'nodes' => ['node_11', 'node_12', 'node_13'],
+            'x' => 45, 'y' => 22,
+        ],
+        [
+            'id'    => 'malachar_tower',
+            'label' => 'Malachar\'s Tower',
+            'icon'  => '&#9813;',
+            'nodes' => ['node_14', 'node_15', 'node_16', 'node_17'],
+            'x' => 50, 'y' => 5,
+        ],
     ];
-    $map_paths = [
-        [30,72, 18,62], [30,72, 50,58], // temple → shard, temple → crossroads
-        [18,62, 50,58],                   // shard → crossroads
-        [50,58, 55,38],                   // crossroads → ember keep
-        [50,58, 72,68],                   // crossroads → ice caves
-        [50,58, 38,48],                   // crossroads → sable
-        [55,38, 62,28], [55,38, 40,32],  // ember keep → inside, → broker
-        [40,32, 62,28],                   // broker → inside keep
-        [72,68, 78,50],                   // ice caves → frozen sanctum
-        [38,48, 32,38],                   // sable → revelation
-        [32,38, 55,38], [32,38, 52,22],  // revelation → ember keep, → ridge
-        [62,28, 52,22], [78,50, 52,22],  // inside keep → ridge, sanctum → ridge
-        [52,22, 42,14], [52,22, 62,14],  // ridge → tower gate, → hidden entry
-        [42,14, 52,6], [62,14, 52,6],    // gate → throne, hidden → throne
-        [52,6, 40,0], [52,6, 52,0], [52,6, 64,0], // throne → duel, ritual, silent
+
+    // Connections between landmarks
+    $connections = [
+        ['ruined_temple', 'crossroads'],
+        ['crossroads',    'ice_caves'],
+        ['crossroads',    'ember_keep'],
+        ['ice_caves',     'ridge_road'],
+        ['ember_keep',    'ridge_road'],
+        ['ridge_road',    'malachar_tower'],
     ];
+
+    // Determine state of each landmark
+    $landmark_map = [];
+    foreach ($landmarks as &$lm) {
+        $lm['state'] = 'hidden';
+        foreach ($lm['nodes'] as $nid) {
+            if ($nid === $node_id) { $lm['state'] = 'current'; break; }
+            if (in_array($nid, $visited, true)) { $lm['state'] = 'visited'; }
+        }
+        $landmark_map[$lm['id']] = $lm;
+    }
+    unset($lm);
     ?>
     <aside class="game-map">
         <div class="map-header">
@@ -192,25 +224,29 @@ $body_class = 'page-game';
             <span class="map-region">VALDRIS</span>
         </div>
         <div class="map-canvas">
-            <svg class="map-lines" viewBox="0 0 100 80" preserveAspectRatio="none">
-                <?php foreach ($map_paths as $p): ?>
-                    <line x1="<?= $p[0] ?>" y1="<?= $p[1] ?>" x2="<?= $p[2] ?>" y2="<?= $p[3] ?>" />
+            <!-- Connection lines -->
+            <svg class="map-lines" viewBox="0 0 100 90" preserveAspectRatio="none">
+                <?php foreach ($connections as $conn): ?>
+                    <?php
+                        $a = $landmark_map[$conn[0]];
+                        $b = $landmark_map[$conn[1]];
+                        $line_vis = ($a['state'] !== 'hidden' || $b['state'] !== 'hidden') ? 'visible' : 'faded';
+                    ?>
+                    <line class="map-line-<?= $line_vis ?>"
+                          x1="<?= $a['x'] ?>" y1="<?= $a['y'] ?>"
+                          x2="<?= $b['x'] ?>" y2="<?= $b['y'] ?>" />
                 <?php endforeach; ?>
             </svg>
-            <?php foreach ($map_locations as $loc): ?>
-                <?php
-                    [$mid, $mlabel, $mx, $my, $micon] = $loc;
-                    $is_current = ($mid === $node_id);
-                    $is_visited = in_array($mid, $visited, true);
-                    $state = $is_current ? 'current' : ($is_visited ? 'visited' : 'hidden');
-                ?>
-                <div class="map-node <?= $state ?>" style="left:<?= $mx ?>%;top:<?= $my ?>%">
-                    <span class="map-icon"><?= $micon ?></span>
-                    <?php if ($is_current): ?>
+
+            <!-- Landmark nodes -->
+            <?php foreach ($landmarks as $lm): ?>
+                <div class="map-node <?= $lm['state'] ?>" style="left:<?= $lm['x'] ?>%;top:<?= $lm['y'] ?>%">
+                    <span class="map-icon"><?= $lm['icon'] ?></span>
+                    <?php if ($lm['state'] === 'current'): ?>
                         <span class="map-badge">CURRENT</span>
                     <?php endif; ?>
-                    <?php if ($is_current || $is_visited): ?>
-                        <span class="map-label"><?= clean($mlabel) ?></span>
+                    <?php if ($lm['state'] !== 'hidden'): ?>
+                        <span class="map-label"><?= clean($lm['label']) ?></span>
                     <?php else: ?>
                         <span class="map-label dim">???</span>
                     <?php endif; ?>

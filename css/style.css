@@ -577,16 +577,22 @@ a:hover { color: var(--gold-soft); }
 
 .map-lines {
     position: absolute;
-    inset: 2.5rem 1.5rem;
-    width: calc(100% - 3rem);
-    height: calc(100% - 5rem);
+    inset: 2rem 1rem;
+    width: calc(100% - 2rem);
+    height: calc(100% - 4rem);
     pointer-events: none;
 }
 
-.map-lines line {
-    stroke: rgba(200, 160, 40, 0.15);
-    stroke-width: 0.4;
-    stroke-dasharray: 1.5 1;
+.map-line-visible {
+    stroke: rgba(200, 160, 40, 0.3);
+    stroke-width: 0.5;
+    stroke-dasharray: 2 1.5;
+}
+
+.map-line-faded {
+    stroke: rgba(100, 80, 50, 0.1);
+    stroke-width: 0.3;
+    stroke-dasharray: 1 2;
 }
 
 .map-node {
@@ -594,64 +600,65 @@ a:hover { color: var(--gold-soft); }
     transform: translate(-50%, -50%);
     text-align: center;
     z-index: 1;
-    transition: opacity 0.3s ease;
 }
 
 .map-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
-    margin: 0 auto 0.2rem;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    font-size: 0.85rem;
+    width: 36px;
+    height: 36px;
+    margin: 0 auto 0.25rem;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    font-size: 1.1rem;
     background: var(--bg-elev);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .map-node.current .map-icon {
     border-color: var(--gold);
-    box-shadow: 0 0 12px rgba(200, 160, 40, 0.4), 0 0 24px rgba(200, 160, 40, 0.15);
-    background: rgba(200, 160, 40, 0.12);
+    box-shadow: 0 0 14px rgba(200, 160, 40, 0.5), 0 0 28px rgba(200, 160, 40, 0.2);
+    background: rgba(200, 160, 40, 0.15);
+    transform: scale(1.1);
 }
 
 .map-node.visited .map-icon {
-    border-color: rgba(200, 160, 40, 0.35);
-    opacity: 0.7;
+    border-color: rgba(200, 160, 40, 0.4);
+    background: rgba(200, 160, 40, 0.06);
 }
 
 .map-node.hidden .map-icon {
-    border-color: rgba(100, 80, 50, 0.15);
-    opacity: 0.25;
+    border-color: rgba(100, 80, 50, 0.12);
+    opacity: 0.2;
 }
 
 .map-badge {
     display: block;
     font-family: 'Cinzel', serif;
-    font-size: 0.42rem;
+    font-size: 0.44rem;
     letter-spacing: 0.22em;
     color: #1a1200;
     background: var(--gold);
-    padding: 0.05rem 0.35rem;
+    padding: 0.1rem 0.4rem;
     border-radius: 2px;
-    margin: 0.15rem auto 0;
+    margin: 0.2rem auto 0;
     width: fit-content;
 }
 
 .map-label {
     display: block;
     font-family: 'Cinzel', serif;
-    font-size: 0.52rem;
-    letter-spacing: 0.12em;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
     color: var(--parchment);
     white-space: nowrap;
-    margin-top: 0.1rem;
+    margin-top: 0.15rem;
 }
 
 .map-label.dim {
-    color: rgba(138, 127, 106, 0.35);
+    color: rgba(138, 127, 106, 0.25);
+    font-size: 0.5rem;
 }
 
 .map-footer {
