@@ -44,6 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     applyStatChanges($chosen['stat_changes'] ?? []);
 
+    if ($chosen['required_item'] !== null) {
+        $inv = &$_SESSION['hero']['inventory'];
+        $idx = array_search($chosen['required_item'], $inv, true);
+        if ($idx !== false) {
+            array_splice($inv, $idx, 1);
+        }
+        unset($inv);
+    }
+
     foreach ($chosen['items_granted'] ?? [] as $item) {
         if (!in_array($item, $_SESSION['hero']['inventory'], true)) {
             $_SESSION['hero']['inventory'][] = $item;

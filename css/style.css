@@ -904,6 +904,284 @@ a:hover { color: var(--gold-soft); }
     color: var(--gold);
 }
 
+/* ── ENDING PAGE ────────────────────────────────── */
+
+.page-ending {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.ending-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    min-height: 100vh;
+}
+
+.ending-narrative {
+    padding: 3rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.ending-sidebar-label {
+    position: absolute;
+    left: 1.5rem;
+    top: 50%;
+    transform: rotate(-90deg) translateX(-50%);
+    transform-origin: left center;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.35em;
+    color: var(--muted);
+}
+
+.ending-outcome {
+    margin-bottom: 1rem;
+}
+
+.outcome-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.28em;
+    color: var(--muted);
+}
+
+.ending-heroic .outcome-line { color: var(--gold-soft); }
+.ending-tragic .outcome-line { color: var(--crimson-hot); }
+.ending-secret .outcome-line { color: var(--blue-ice); }
+.ending-death .outcome-line  { color: var(--crimson-hot); }
+
+.ending-headline {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    line-height: 1.05;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+}
+
+.ending-heroic .ending-headline { color: var(--parchment); }
+.ending-tragic .ending-headline { color: var(--crimson-hot); }
+.ending-secret .ending-headline { color: var(--blue-ice); }
+.ending-death .ending-headline  { color: var(--crimson-hot); }
+
+.ending-story {
+    max-width: 540px;
+    margin-bottom: 1.5rem;
+}
+
+.ending-story-main {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    font-style: italic;
+    color: var(--parchment);
+}
+
+.ending-epilogue {
+    max-width: 540px;
+    margin-bottom: 2.5rem;
+}
+
+.ending-epilogue p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--muted);
+}
+
+.ending-actions {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+}
+
+.ending-actions .btn {
+    width: auto;
+    min-width: 180px;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: var(--parchment);
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0.9rem 1.5rem;
+}
+
+.btn-link:hover { color: var(--gold); }
+
+/* ── ENDING STATS COLUMN ───────────────────────── */
+
+.ending-stats {
+    background: rgba(234, 224, 202, 0.06);
+    border-left: 1px solid var(--border);
+    padding: 2rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    justify-content: center;
+    overflow-y: auto;
+}
+
+.stat-card {
+    background: rgba(234, 224, 202, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.25rem;
+}
+
+.stat-card-label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.24em;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+}
+
+.stat-card-value {
+    display: block;
+}
+
+.persona-name {
+    font-family: 'Cinzel', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--parchment);
+}
+
+.score-value {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: var(--gold);
+    text-align: right;
+}
+
+.stat-card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.stat-card-right { text-align: right; }
+
+.stat-card-persona { margin-bottom: 0; }
+
+.persona-bars {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.persona-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bar-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.42rem;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    min-width: 55px;
+}
+
+.bar-name:last-child { text-align: right; }
+
+.bar-track {
+    flex: 1;
+    height: 4px;
+    background: rgba(234, 224, 202, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+}
+
+.bar-mercy    { background: linear-gradient(90deg, var(--blue-ice), var(--gold)); }
+.bar-strategy { background: linear-gradient(90deg, var(--gold-soft), var(--crimson-hot)); }
+
+.stat-card-pair {
+    gap: 1rem;
+}
+
+.stat-card-pair .stat-card {
+    flex: 1;
+    text-align: center;
+}
+
+.stat-card-big {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    color: var(--parchment);
+    line-height: 1;
+    margin-top: 0.3rem;
+}
+
+.stat-card-big sup {
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.stat-card-hero { }
+
+.stat-hero-name {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--parchment);
+}
+
+.stat-hero-class {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+}
+
+.stat-hero-stats {
+    display: flex;
+    gap: 1.25rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: var(--parchment);
+}
+
+.stat-card-relics { }
+
+.relic-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid rgba(200, 160, 40, 0.06);
+}
+
+.relic-icon {
+    color: var(--gold);
+    font-size: 0.7rem;
+}
+
+.relic-name {
+    font-size: 0.88rem;
+    color: var(--parchment);
+}
+
 /* ── RESPONSIVE ────────────────────────────────── */
 
 @media (max-width: 960px) {
@@ -919,6 +1197,12 @@ a:hover { color: var(--gold-soft); }
     }
     .bar-stats { gap: 1rem; }
     .bar-eclipse { display: none; }
+    .ending-layout {
+        grid-template-columns: 1fr;
+    }
+    .ending-narrative { padding: 2rem 1.5rem; }
+    .ending-stats { border-left: none; border-top: 1px solid var(--border); }
+    .ending-sidebar-label { display: none; }
 }
 
 @media (max-width: 600px) {
@@ -929,4 +1213,8 @@ a:hover { color: var(--gold-soft); }
     .class-header { justify-content: center; text-align: center; }
     .game-bar { padding: 0.5rem 0.75rem; flex-wrap: wrap; gap: 0.5rem; }
     .game-main { padding: 1.25rem; }
+    .ending-narrative { padding: 1.5rem 1rem; }
+    .ending-headline { font-size: 2rem; }
+    .ending-actions { flex-direction: column; }
+    .ending-actions .btn { width: 100%; }
 }
