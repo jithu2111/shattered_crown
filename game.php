@@ -284,9 +284,16 @@ $body_class = 'page-game';
         </div>
 
         <!-- ── ENDING PREDICTOR ────────────────── -->
-        <div class="ending-predictor">
+        <?php $prediction = getEndingPrediction($_SESSION['alignment'], count($hero['nodes_visited'])); ?>
+        <div class="ending-predictor <?= $prediction['class'] ?>">
             <span class="predictor-icon">&#9790;</span>
             <span class="predictor-label">ENDING PREDICTOR</span>
+            <span class="predictor-ending"><?= clean($prediction['ending']) ?></span>
+            <div class="predictor-bar-track">
+                <div class="predictor-bar-fill" style="width:<?= $prediction['confidence'] ?>%"></div>
+            </div>
+            <span class="predictor-confidence"><?= $prediction['confidence'] ?>% confidence</span>
+            <span class="predictor-text"><?= clean($prediction['text']) ?></span>
         </div>
     </section>
 

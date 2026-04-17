@@ -95,6 +95,51 @@ function getLockReason(array $choice): string {
     return 'Locked';
 }
 
+function getEndingPrediction(int $alignment, int $nodes_visited): array {
+    $abs = abs($alignment);
+    $progress = min($nodes_visited / 17, 1.0);
+    $confidence = (int) round(max(20, min(95, $abs * 8 + $progress * 40)));
+
+    if ($alignment >= 6) {
+        return [
+            'ending'     => 'Heroic',
+            'class'      => 'predictor-heroic',
+            'confidence' => $confidence,
+            'text'       => 'The Crown yearns to be whole. Your valor may restore it.',
+        ];
+    }
+    if ($alignment <= -6) {
+        return [
+            'ending'     => 'Tragic',
+            'class'      => 'predictor-tragic',
+            'confidence' => $confidence,
+            'text'       => 'Darkness coils around your fate. The eclipse draws near.',
+        ];
+    }
+    if ($abs >= 3 && $alignment > 0) {
+        return [
+            'ending'     => 'Heroic',
+            'class'      => 'predictor-heroic',
+            'confidence' => $confidence,
+            'text'       => 'A glimmer of light persists. The path of the just is still open.',
+        ];
+    }
+    if ($abs >= 3 && $alignment < 0) {
+        return [
+            'ending'     => 'Tragic',
+            'class'      => 'predictor-tragic',
+            'confidence' => $confidence,
+            'text'       => 'Shadows lengthen behind you. One more step into the dark…',
+        ];
+    }
+    return [
+        'ending'     => 'Secret',
+        'class'      => 'predictor-secret',
+        'confidence' => $confidence,
+        'text'       => 'The scales are balanced — a hidden path may reveal itself.',
+    ];
+}
+
 function getAlignmentHint(int $score): string {
     if ($score >= 10) return 'The light of Valdris burns bright within you. A heroic fate beckons.';
     if ($score >= 5)  return 'Your path leans toward the just. The Crown may yet be restored.';
