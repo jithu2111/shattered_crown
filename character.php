@@ -20,6 +20,19 @@ if ($existing_save) {
     }
 }
 
+// Cookie-based resume hint: if no save file but cookie points at a mid-run node,
+// surface the node so the player knows progress was partially recoverable.
+$cookie_resume = null;
+if (!$existing_save && !empty($_COOKIE['sc_node'])) {
+    $cookie_node = $_COOKIE['sc_node'];
+    if (isset($nodes[$cookie_node]) && !$nodes[$cookie_node]['is_terminal']) {
+        $cookie_resume = [
+            'node'  => $cookie_node,
+            'title' => $nodes[$cookie_node]['title'],
+        ];
+    }
+}
+
 // Handle continue / delete save actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'continue' && $existing_save) {
@@ -114,6 +127,12 @@ include __DIR__ . '/includes/header.php';
         </div>
     </div>
     <?php else: ?>
+
+    <?php if ($cookie_resume): ?>
+        <div class="flash flash-error">
+            The last trace of your journey points to <strong><?= clean($cookie_resume['title']) ?></strong>, but the saved scroll could not be read. A new legend must begin.
+        </div>
+    <?php endif; ?>
 
     <form method="POST" action="character.php">
         <div class="field char-name-field">
