@@ -66,6 +66,9 @@ if ($alignment >= 8) {
 // Calculate final score
 $final_score = calculateScore();
 
+// Archetype match — does the persona fit this ending?
+$archetype = getArchetypeMatch($persona, $ending_type, $alignment);
+
 // Stats
 $total_nodes   = count(array_filter($nodes, fn($n) => !$n['is_terminal']));
 $nodes_pct     = $total_nodes > 0 ? round(count($visited) / $total_nodes * 100) : 0;
@@ -225,6 +228,17 @@ $page_title = $ending_title . ' &middot; The Shattered Crown';
                     <div class="bar-track"><div class="bar-fill bar-strategy" style="width:<?= min(100, max(5, count($visited) / max(1, $total_nodes) * 100)) ?>%"></div></div>
                     <span class="bar-name">PRIMAL</span>
                 </div>
+            </div>
+
+            <div class="archetype-match <?= $archetype['matched'] ? 'matched' : 'mismatched' ?>">
+                <div class="archetype-top">
+                    <span class="archetype-label">ARCHETYPE MATCH</span>
+                    <span class="archetype-pct"><?= $archetype['percent'] ?>%</span>
+                </div>
+                <div class="archetype-track">
+                    <div class="archetype-fill" style="width:<?= $archetype['percent'] ?>%"></div>
+                </div>
+                <p class="archetype-verdict"><?= clean($archetype['verdict']) ?></p>
             </div>
         </div>
 

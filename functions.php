@@ -148,6 +148,45 @@ function getAlignmentHint(int $score): string {
     return 'The eclipse whispers your name. Power — or ruin — awaits.';
 }
 
+function getArchetypeMatch(string $persona, string $ending_type, int $alignment): array {
+    // Expected ending per persona (which ending their alignment trajectory points toward)
+    $expected = [
+        'The Justiciar' => 'heroic',
+        'The Warden'    => 'heroic',
+        'The Drifter'   => 'secret',
+        'The Schemer'   => 'secret',
+        'The Usurper'   => 'tragic',
+    ];
+
+    $expected_ending = $expected[$persona] ?? 'secret';
+    $matched = ($expected_ending === $ending_type);
+
+    // Confidence: how strongly the alignment supports the ending outcome
+    $abs = abs($alignment);
+    $base = $matched ? 70 : 30;
+    $adjust = min(25, $abs * 3);
+    if ($ending_type === 'death') {
+        $base = 15;
+        $adjust = 0;
+    }
+    $percent = max(5, min(99, $base + ($matched ? $adjust : -$adjust)));
+
+    if ($matched) {
+        $verdict = "Your actions rang true. $persona was always the name fate wrote.";
+    } elseif ($ending_type === 'death') {
+        $verdict = "The ending claimed you before your persona could settle. $persona was a path cut short.";
+    } else {
+        $verdict = "Your path defied your nature. $persona walked a road they were not meant to travel.";
+    }
+
+    return [
+        'expected' => $expected_ending,
+        'matched'  => $matched,
+        'percent'  => (int) round($percent),
+        'verdict'  => $verdict,
+    ];
+}
+
 function getAlternativePaths(array $nodes, array $locked_log, array $hero): array {
     $suggestions = [];
     foreach ($locked_log as $key) {
