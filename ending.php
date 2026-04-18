@@ -143,10 +143,20 @@ $page_title = $ending_title . ' &middot; The Shattered Crown';
             <span class="alt-paths-label">PATHS NOT TAKEN</span>
             <p class="alt-paths-intro">The road you walked was one of many. Had fate been kinder — or your hand steadier — these doors might have opened:</p>
             <ul class="alt-paths-list">
-                <?php foreach ($suggestions as $s): ?>
-                    <li class="alt-path">
+                <?php
+                    // Closest miss = first stat-gap suggestion with gap >= 1
+                    $closest_idx = null;
+                    foreach ($suggestions as $i => $s) {
+                        if ($s['kind'] === 'stat' && $s['gap'] >= 1) { $closest_idx = $i; break; }
+                    }
+                ?>
+                <?php foreach ($suggestions as $i => $s): ?>
+                    <li class="alt-path <?= $i === $closest_idx ? 'alt-path-closest' : '' ?>">
                         <div class="alt-path-top">
                             <span class="alt-path-where"><?= clean($s['node_title']) ?></span>
+                            <?php if ($i === $closest_idx): ?>
+                                <span class="alt-path-badge">&#9733; SO CLOSE</span>
+                            <?php endif; ?>
                             <?php if ($s['kind'] === 'stat'): ?>
                                 <?php if ($s['gap'] > 0): ?>
                                     <span class="alt-path-gap"><?= $s['gap'] ?> <?= clean($s['stat']) ?> short</span>
