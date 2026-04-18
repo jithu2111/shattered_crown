@@ -50,6 +50,7 @@ include __DIR__ . '/includes/header.php';
     <?php endif; ?>
 
     <form method="POST" action="login.php" novalidate>
+        <?= csrfField() ?>
         <div class="field">
             <label for="username">Hero Name</label>
             <input type="text" id="username" name="username" value="<?= $old_username ?>" autocomplete="username" required>

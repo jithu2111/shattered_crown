@@ -11,6 +11,9 @@ $errors = [];
 $old = ['username' => '', 'email' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!csrfCheck()) {
+        $errors['general'] = 'The sigil on your oath is broken. Try again.';
+    }
     $username = trim($_POST['username'] ?? '');
     $email    = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
@@ -69,6 +72,7 @@ include __DIR__ . '/includes/header.php';
     <?php endif; ?>
 
     <form method="POST" action="register.php" novalidate>
+        <?= csrfField() ?>
         <div class="field">
             <label for="username">Hero Name</label>
             <input type="text" id="username" name="username" value="<?= $old['username'] ?>" autocomplete="username" required>
