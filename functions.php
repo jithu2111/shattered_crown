@@ -148,6 +148,89 @@ function getAlignmentHint(int $score): string {
     return 'The eclipse whispers your name. Power — or ruin — awaits.';
 }
 
+function getArchetypeMatch(string $persona, string $ending_type, int $alignment): array {
+    // Expected ending per persona (which ending their alignment trajectory points toward)
+    $expected = [
+        'The Justiciar' => 'heroic',
+        'The Warden'    => 'heroic',
+        'The Drifter'   => 'secret',
+        'The Schemer'   => 'secret',
+        'The Usurper'   => 'tragic',
+    ];
+
+    $expected_ending = $expected[$persona] ?? 'secret';
+    $matched = ($expected_ending === $ending_type);
+
+    // Confidence: how strongly the alignment supports the ending outcome
+    $abs = abs($alignment);
+    $base = $matched ? 70 : 30;
+    $adjust = min(25, $abs * 3);
+    if ($ending_type === 'death') {
+        $base = 15;
+        $adjust = 0;
+    }
+    $percent = max(5, min(99, $base + ($matched ? $adjust : -$adjust)));
+
+    if ($matched) {
+        $verdict = "Your actions rang true. $persona was always the name fate wrote.";
+    } elseif ($ending_type === 'death') {
+        $verdict = "The ending claimed you before your persona could settle. $persona was a path cut short.";
+    } else {
+        $verdict = "Your path defied your nature. $persona walked a road they were not meant to travel.";
+    }
+
+    return [
+        'expected' => $expected_ending,
+        'matched'  => $matched,
+        'percent'  => (int) round($percent),
+        'verdict'  => $verdict,
+    ];
+}
+
+function getAlternativePaths(array $nodes, array $locked_log, array $hero): array {
+    $suggestions = [];
+    foreach ($locked_log as $key) {
+        [$node_id, $choice_id] = array_pad(explode(':', $key, 2), 2, '');
+        if (!isset($nodes[$node_id])) continue;
+        $node = $nodes[$node_id];
+        foreach ($node['choices'] as $c) {
+            if ($c['id'] !== $choice_id) continue;
+
+            if (!empty($c['required_stat'])) {
+                $stat = $c['required_stat'];
+                $need = (int) $c['required_val'];
+                $have = (int) ($hero[$stat] ?? 0);
+                $gap  = max(0, $need - $have);
+                $suggestions[] = [
+                    'node_title'  => $node['title'],
+                    'choice_text' => $c['text'],
+                    'kind'        => 'stat',
+                    'stat'        => strtoupper($stat),
+                    'gap'         => $gap,
+                    'need'        => $need,
+                    'have'        => $have,
+                ];
+            } elseif (!empty($c['required_item'])) {
+                $suggestions[] = [
+                    'node_title'  => $node['title'],
+                    'choice_text' => $c['text'],
+                    'kind'        => 'item',
+                    'item'        => $c['required_item'],
+                ];
+            }
+            break;
+        }
+    }
+
+    usort($suggestions, function ($a, $b) {
+        $ga = $a['kind'] === 'stat' ? $a['gap'] : PHP_INT_MAX;
+        $gb = $b['kind'] === 'stat' ? $b['gap'] : PHP_INT_MAX;
+        return $ga <=> $gb;
+    });
+
+    return array_slice($suggestions, 0, 4);
+}
+
 function calculateScore(): int {
     $hero = $_SESSION['hero'];
     $base = $hero['score'] ?? 500;

@@ -15,6 +15,25 @@ $visited   = $hero['nodes_visited'] ?? [];
 $locked    = $_SESSION['locked_log'] ?? [];
 $inventory = $hero['inventory'] ?? [];
 $journey   = $_SESSION['choices_log'] ?? [];
+$alignment_history = $_SESSION['alignment_history'] ?? [];
+$suggestions = getAlternativePaths($nodes, $locked, $hero);
+
+// Build alignment sparkline points (SVG 0..100 x, 0..40 y, y flipped so higher = up)
+$spark_points = '';
+$spark_area   = '';
+if (!empty($alignment_history)) {
+    $series = array_merge([0], $alignment_history);
+    $n = count($series);
+    $max_abs = max(1, max(array_map('abs', $series)));
+    $pts = [];
+    foreach ($series as $i => $v) {
+        $x = $n > 1 ? round(($i / ($n - 1)) * 100, 2) : 50;
+        $y = round(20 - ($v / $max_abs) * 18, 2);
+        $pts[] = "$x,$y";
+    }
+    $spark_points = implode(' ', $pts);
+    $spark_area   = "0,20 " . $spark_points . " 100,20";
+}
 
 // Determine ending
 $death = isset($_GET['reason']) && $_GET['reason'] === 'death';
@@ -46,6 +65,9 @@ if ($alignment >= 8) {
 
 // Calculate final score
 $final_score = calculateScore();
+
+// Archetype match — does the persona fit this ending?
+$archetype = getArchetypeMatch($persona, $ending_type, $alignment);
 
 // Stats
 $total_nodes   = count(array_filter($nodes, fn($n) => !$n['is_terminal']));
@@ -119,6 +141,45 @@ $page_title = $ending_title . ' &middot; The Shattered Crown';
             <?php endif; ?>
         </div>
 
+        <?php if (!empty($suggestions)): ?>
+        <div class="ending-alt-paths">
+            <span class="alt-paths-label">PATHS NOT TAKEN</span>
+            <p class="alt-paths-intro">The road you walked was one of many. Had fate been kinder — or your hand steadier — these doors might have opened:</p>
+            <ul class="alt-paths-list">
+                <?php
+                    // Closest miss = first stat-gap suggestion with gap >= 1
+                    $closest_idx = null;
+                    foreach ($suggestions as $i => $s) {
+                        if ($s['kind'] === 'stat' && $s['gap'] >= 1) { $closest_idx = $i; break; }
+                    }
+                ?>
+                <?php foreach ($suggestions as $i => $s): ?>
+                    <li class="alt-path <?= $i === $closest_idx ? 'alt-path-closest' : '' ?>">
+                        <div class="alt-path-top">
+                            <span class="alt-path-where"><?= clean($s['node_title']) ?></span>
+                            <?php if ($i === $closest_idx): ?>
+                                <span class="alt-path-badge">&#9733; SO CLOSE</span>
+                            <?php endif; ?>
+                            <?php if ($s['kind'] === 'stat'): ?>
+                                <?php if ($s['gap'] > 0): ?>
+                                    <span class="alt-path-gap"><?= $s['gap'] ?> <?= clean($s['stat']) ?> short</span>
+                                <?php else: ?>
+                                    <span class="alt-path-gap muted">requirement met &mdash; path unexplored</span>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <span class="alt-path-gap">needed: <?= clean($s['item']) ?></span>
+                            <?php endif; ?>
+                        </div>
+                        <span class="alt-path-choice">&ldquo;<?= clean($s['choice_text']) ?>&rdquo;</span>
+                        <?php if ($s['kind'] === 'stat'): ?>
+                            <span class="alt-path-detail">You had <?= $s['have'] ?> <?= clean($s['stat']) ?> &middot; needed <?= $s['need'] ?></span>
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <?php endif; ?>
+
         <?php if (!empty($journey)): ?>
         <div class="ending-journey">
             <span class="journey-label">YOUR JOURNEY &mdash; <?= count($journey) ?> CHOICES</span>
@@ -168,7 +229,36 @@ $page_title = $ending_title . ' &middot; The Shattered Crown';
                     <span class="bar-name">PRIMAL</span>
                 </div>
             </div>
+
+            <div class="archetype-match <?= $archetype['matched'] ? 'matched' : 'mismatched' ?>">
+                <div class="archetype-top">
+                    <span class="archetype-label">ARCHETYPE MATCH</span>
+                    <span class="archetype-pct"><?= $archetype['percent'] ?>%</span>
+                </div>
+                <div class="archetype-track">
+                    <div class="archetype-fill" style="width:<?= $archetype['percent'] ?>%"></div>
+                </div>
+                <p class="archetype-verdict"><?= clean($archetype['verdict']) ?></p>
+            </div>
         </div>
+
+        <?php if (!empty($alignment_history)): ?>
+        <div class="stat-card stat-card-alignment">
+            <span class="stat-card-label">ALIGNMENT OVER TIME</span>
+            <svg class="alignment-chart" viewBox="0 0 100 22" preserveAspectRatio="none" aria-hidden="true">
+                <line class="align-axis" x1="0" y1="20" x2="100" y2="20"/>
+                <polygon class="align-area" points="<?= $spark_area ?>"/>
+                <polyline class="align-line" points="<?= $spark_points ?>"/>
+            </svg>
+            <div class="alignment-chart-foot">
+                <span>Start</span>
+                <span class="align-final <?= $alignment >= 0 ? 'pos' : 'neg' ?>">
+                    Final: <?= $alignment > 0 ? '+' . $alignment : $alignment ?>
+                </span>
+                <span>End</span>
+            </div>
+        </div>
+        <?php endif; ?>
 
         <div class="stat-card-row stat-card-pair">
             <div class="stat-card">
