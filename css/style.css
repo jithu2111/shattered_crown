@@ -486,6 +486,28 @@ a:hover { color: var(--gold-soft); }
     padding: 0.75rem 1rem;
 }
 
+.save-action-form {
+    flex: 1;
+    display: flex;
+}
+
+.save-action-form .btn {
+    width: 100%;
+}
+
+.save-confirm {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(207, 168, 87, 0.25);
+}
+
+.save-confirm-text {
+    color: #d8c9a3;
+    font-style: italic;
+    margin: 0 0 0.75rem 0;
+    text-align: center;
+}
+
 /* ── GAME UI ────────────────────────────────────── */
 
 .page-game {
@@ -1292,6 +1314,22 @@ a:hover { color: var(--gold-soft); }
 }
 
 .lb-filter-clear:hover { color: var(--gold); }
+
+.lb-filter-apply {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.1rem;
+    background: var(--gold);
+    color: #1a120b;
+    border: none;
+    cursor: pointer;
+    align-self: flex-end;
+    border-radius: 2px;
+}
+
+.lb-filter-apply:hover { background: #e2c07a; }
 
 .lb-empty {
     font-style: italic;

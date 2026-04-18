@@ -157,7 +157,7 @@ $page_title = 'Hall of Legends &middot; The Shattered Crown';
             <form method="GET" action="leaderboard.php" class="lb-filters">
                 <label class="lb-filter">
                     <span class="lb-filter-label">Ending</span>
-                    <select name="ending" onchange="this.form.submit()">
+                    <select name="ending">
                         <option value="all"    <?= $filter_ending === 'all'    ? 'selected' : '' ?>>All</option>
                         <option value="heroic" <?= $filter_ending === 'heroic' ? 'selected' : '' ?>>Heroic</option>
                         <option value="tragic" <?= $filter_ending === 'tragic' ? 'selected' : '' ?>>Tragic</option>
@@ -167,7 +167,7 @@ $page_title = 'Hall of Legends &middot; The Shattered Crown';
                 </label>
                 <label class="lb-filter">
                     <span class="lb-filter-label">Class</span>
-                    <select name="class" onchange="this.form.submit()">
+                    <select name="class">
                         <option value="all"     <?= $filter_class === 'all'     ? 'selected' : '' ?>>All</option>
                         <option value="warrior" <?= $filter_class === 'warrior' ? 'selected' : '' ?>>Warrior</option>
                         <option value="mage"    <?= $filter_class === 'mage'    ? 'selected' : '' ?>>Mage</option>
@@ -176,13 +176,14 @@ $page_title = 'Hall of Legends &middot; The Shattered Crown';
                 </label>
                 <label class="lb-filter">
                     <span class="lb-filter-label">Sort</span>
-                    <select name="sort" onchange="this.form.submit()">
+                    <select name="sort">
                         <option value="score_desc" <?= $sort_mode === 'score_desc' ? 'selected' : '' ?>>Score &mdash; High to Low</option>
                         <option value="score_asc"  <?= $sort_mode === 'score_asc'  ? 'selected' : '' ?>>Score &mdash; Low to High</option>
                         <option value="date_desc"  <?= $sort_mode === 'date_desc'  ? 'selected' : '' ?>>Date &mdash; Newest First</option>
                         <option value="date_asc"   <?= $sort_mode === 'date_asc'   ? 'selected' : '' ?>>Date &mdash; Oldest First</option>
                     </select>
                 </label>
+                <button type="submit" class="lb-filter-apply">Apply</button>
                 <?php if ($filter_ending !== 'all' || $filter_class !== 'all' || $sort_mode !== 'score_desc'): ?>
                     <a href="leaderboard.php" class="lb-filter-clear">Clear</a>
                 <?php endif; ?>

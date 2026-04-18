@@ -40,16 +40,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !csrfCheck()) {
 }
 
 // Handle continue / delete save actions
+$confirm_new_game = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'continue' && $existing_save) {
         restoreSave($existing_save);
         header('Location: game.php');
         exit;
     }
-    if ($_POST['action'] === 'new_game') {
+    if ($_POST['action'] === 'new_game_request' && $existing_save) {
+        $confirm_new_game = true;
+    }
+    if ($_POST['action'] === 'new_game_confirm') {
         resetGame();
         $existing_save = null;
-        // Fall through to show character creation form
     }
 }
 
@@ -121,18 +124,32 @@ include __DIR__ . '/includes/header.php';
             <?php endif; ?>
             <span class="save-time">Saved <?= date('M j, g:i A', strtotime($existing_save['saved_at'])) ?></span>
         </div>
+        <?php if ($confirm_new_game): ?>
+        <div class="save-confirm">
+            <p class="save-confirm-text">This will erase your saved progress. Begin a new legend?</p>
+            <div class="save-actions">
+                <form method="POST" action="character.php" class="save-action-form">
+                    <?= csrfField() ?>
+                    <input type="hidden" name="action" value="new_game_confirm">
+                    <button type="submit" class="btn btn-danger btn-select">Yes, Begin Anew</button>
+                </form>
+                <a href="character.php" class="btn btn-primary btn-select">Cancel</a>
+            </div>
+        </div>
+        <?php else: ?>
         <div class="save-actions">
-            <form method="POST" action="character.php" style="display:inline">
+            <form method="POST" action="character.php" class="save-action-form">
                 <?= csrfField() ?>
                 <input type="hidden" name="action" value="continue">
                 <button type="submit" class="btn btn-primary btn-select">Continue Journey</button>
             </form>
-            <form method="POST" action="character.php" style="display:inline">
+            <form method="POST" action="character.php" class="save-action-form">
                 <?= csrfField() ?>
-                <input type="hidden" name="action" value="new_game">
-                <button type="submit" class="btn btn-danger btn-select" onclick="return confirm('This will erase your saved progress. Are you sure?')">New Game</button>
+                <input type="hidden" name="action" value="new_game_request">
+                <button type="submit" class="btn btn-danger btn-select">New Game</button>
             </form>
         </div>
+        <?php endif; ?>
     </div>
     <?php else: ?>
 
