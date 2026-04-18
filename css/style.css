@@ -1331,6 +1331,97 @@ a:hover { color: var(--gold-soft); }
     color: var(--muted);
 }
 
+.ending-alt-paths {
+    max-width: 540px;
+    margin-bottom: 2rem;
+    padding: 1.25rem 1.5rem;
+    background: rgba(196, 30, 58, 0.06);
+    border: 1px solid rgba(196, 30, 58, 0.25);
+    border-radius: 4px;
+}
+
+.alt-paths-label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.28em;
+    color: var(--crimson-hot);
+    margin-bottom: 0.6rem;
+}
+
+.alt-paths-intro {
+    font-size: 0.92rem;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 0.9rem;
+    line-height: 1.55;
+}
+
+.alt-paths-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.alt-path {
+    padding: 0.7rem 0.9rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-left: 2px solid var(--crimson-hot);
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.alt-path-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.alt-path-where {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+}
+
+.alt-path-gap {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    color: var(--crimson-hot);
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    background: rgba(196, 30, 58, 0.12);
+    border-radius: 2px;
+}
+
+.alt-path-gap.muted {
+    color: var(--muted);
+    background: rgba(138, 127, 106, 0.1);
+}
+
+.alt-path-choice {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--parchment);
+    line-height: 1.4;
+}
+
+.alt-path-detail {
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+}
+
 .ending-journey {
     max-width: 540px;
     margin-bottom: 2rem;

@@ -15,6 +15,25 @@ $visited   = $hero['nodes_visited'] ?? [];
 $locked    = $_SESSION['locked_log'] ?? [];
 $inventory = $hero['inventory'] ?? [];
 $journey   = $_SESSION['choices_log'] ?? [];
+$alignment_history = $_SESSION['alignment_history'] ?? [];
+$suggestions = getAlternativePaths($nodes, $locked, $hero);
+
+// Build alignment sparkline points (SVG 0..100 x, 0..40 y, y flipped so higher = up)
+$spark_points = '';
+$spark_area   = '';
+if (!empty($alignment_history)) {
+    $series = array_merge([0], $alignment_history);
+    $n = count($series);
+    $max_abs = max(1, max(array_map('abs', $series)));
+    $pts = [];
+    foreach ($series as $i => $v) {
+        $x = $n > 1 ? round(($i / ($n - 1)) * 100, 2) : 50;
+        $y = round(20 - ($v / $max_abs) * 18, 2);
+        $pts[] = "$x,$y";
+    }
+    $spark_points = implode(' ', $pts);
+    $spark_area   = "0,20 " . $spark_points . " 100,20";
+}
 
 // Determine ending
 $death = isset($_GET['reason']) && $_GET['reason'] === 'death';
@@ -118,6 +137,35 @@ $page_title = $ending_title . ' &middot; The Shattered Crown';
                 <p>Your journey ends here, but the Crown remains shattered. Perhaps another seeker will rise where you fell.</p>
             <?php endif; ?>
         </div>
+
+        <?php if (!empty($suggestions)): ?>
+        <div class="ending-alt-paths">
+            <span class="alt-paths-label">PATHS NOT TAKEN</span>
+            <p class="alt-paths-intro">The road you walked was one of many. Had fate been kinder — or your hand steadier — these doors might have opened:</p>
+            <ul class="alt-paths-list">
+                <?php foreach ($suggestions as $s): ?>
+                    <li class="alt-path">
+                        <div class="alt-path-top">
+                            <span class="alt-path-where"><?= clean($s['node_title']) ?></span>
+                            <?php if ($s['kind'] === 'stat'): ?>
+                                <?php if ($s['gap'] > 0): ?>
+                                    <span class="alt-path-gap"><?= $s['gap'] ?> <?= clean($s['stat']) ?> short</span>
+                                <?php else: ?>
+                                    <span class="alt-path-gap muted">requirement met &mdash; path unexplored</span>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <span class="alt-path-gap">needed: <?= clean($s['item']) ?></span>
+                            <?php endif; ?>
+                        </div>
+                        <span class="alt-path-choice">&ldquo;<?= clean($s['choice_text']) ?>&rdquo;</span>
+                        <?php if ($s['kind'] === 'stat'): ?>
+                            <span class="alt-path-detail">You had <?= $s['have'] ?> <?= clean($s['stat']) ?> &middot; needed <?= $s['need'] ?></span>
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <?php endif; ?>
 
         <?php if (!empty($journey)): ?>
         <div class="ending-journey">

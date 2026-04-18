@@ -148,6 +148,50 @@ function getAlignmentHint(int $score): string {
     return 'The eclipse whispers your name. Power — or ruin — awaits.';
 }
 
+function getAlternativePaths(array $nodes, array $locked_log, array $hero): array {
+    $suggestions = [];
+    foreach ($locked_log as $key) {
+        [$node_id, $choice_id] = array_pad(explode(':', $key, 2), 2, '');
+        if (!isset($nodes[$node_id])) continue;
+        $node = $nodes[$node_id];
+        foreach ($node['choices'] as $c) {
+            if ($c['id'] !== $choice_id) continue;
+
+            if (!empty($c['required_stat'])) {
+                $stat = $c['required_stat'];
+                $need = (int) $c['required_val'];
+                $have = (int) ($hero[$stat] ?? 0);
+                $gap  = max(0, $need - $have);
+                $suggestions[] = [
+                    'node_title'  => $node['title'],
+                    'choice_text' => $c['text'],
+                    'kind'        => 'stat',
+                    'stat'        => strtoupper($stat),
+                    'gap'         => $gap,
+                    'need'        => $need,
+                    'have'        => $have,
+                ];
+            } elseif (!empty($c['required_item'])) {
+                $suggestions[] = [
+                    'node_title'  => $node['title'],
+                    'choice_text' => $c['text'],
+                    'kind'        => 'item',
+                    'item'        => $c['required_item'],
+                ];
+            }
+            break;
+        }
+    }
+
+    usort($suggestions, function ($a, $b) {
+        $ga = $a['kind'] === 'stat' ? $a['gap'] : PHP_INT_MAX;
+        $gb = $b['kind'] === 'stat' ? $b['gap'] : PHP_INT_MAX;
+        return $ga <=> $gb;
+    });
+
+    return array_slice($suggestions, 0, 4);
+}
+
 function calculateScore(): int {
     $hero = $_SESSION['hero'];
     $base = $hero['score'] ?? 500;
