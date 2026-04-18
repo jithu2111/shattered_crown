@@ -29,6 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'A valid raven address is required.';
+    } elseif (strlen($email) > 254) {
+        $errors['email'] = 'That raven address is too long.';
     }
 
     if (strlen($password) < 8) {
