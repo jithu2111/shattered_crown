@@ -218,6 +218,24 @@ $page_title = $ending_title . ' &middot; The Shattered Crown';
             </div>
         </div>
 
+        <?php if (!empty($alignment_history)): ?>
+        <div class="stat-card stat-card-alignment">
+            <span class="stat-card-label">ALIGNMENT OVER TIME</span>
+            <svg class="alignment-chart" viewBox="0 0 100 22" preserveAspectRatio="none" aria-hidden="true">
+                <line class="align-axis" x1="0" y1="20" x2="100" y2="20"/>
+                <polygon class="align-area" points="<?= $spark_area ?>"/>
+                <polyline class="align-line" points="<?= $spark_points ?>"/>
+            </svg>
+            <div class="alignment-chart-foot">
+                <span>Start</span>
+                <span class="align-final <?= $alignment >= 0 ? 'pos' : 'neg' ?>">
+                    Final: <?= $alignment > 0 ? '+' . $alignment : $alignment ?>
+                </span>
+                <span>End</span>
+            </div>
+        </div>
+        <?php endif; ?>
+
         <div class="stat-card-row stat-card-pair">
             <div class="stat-card">
                 <span class="stat-card-label">NODES EXPLORED</span>
