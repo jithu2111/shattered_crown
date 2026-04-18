@@ -14,9 +14,14 @@ $filter_ending = in_array($_GET['ending'] ?? 'all', $allowed_endings, true) ? $_
 $filter_class  = in_array($_GET['class']  ?? 'all', $allowed_classes, true) ? $_GET['class']  ?? 'all' : 'all';
 $sort_mode     = in_array($_GET['sort']   ?? 'score_desc', $allowed_sorts, true) ? $_GET['sort'] ?? 'score_desc' : 'score_desc';
 
-// Player's own history — always by score desc, unfiltered
+// Player's own history — score desc for the table
 $my_games = array_values(array_filter($scores, fn($s) => strcasecmp($s['username'], $username) === 0));
 usort($my_games, fn($a, $b) => $b['score'] <=> $a['score']);
+
+// Latest run (by date) for the summary card
+$my_latest = $my_games;
+usort($my_latest, fn($a, $b) => strtotime($b['date'] ?? '0') <=> strtotime($a['date'] ?? '0'));
+$my_latest = $my_latest[0] ?? null;
 
 // Global list: apply filters, then sort
 $global = $scores;
@@ -95,7 +100,7 @@ $page_title = 'Hall of Legends &middot; The Shattered Crown';
         <div class="lb-summary">
             <div class="lb-summary-card">
                 <span class="lb-summary-label">Latest Ending</span>
-                <span class="lb-summary-value <?= $ending_colors[$my_games[0]['ending']] ?? '' ?>"><?= ucfirst($my_games[0]['ending']) ?></span>
+                <span class="lb-summary-value <?= $ending_colors[$my_latest['ending']] ?? '' ?>"><?= ucfirst($my_latest['ending']) ?></span>
             </div>
             <div class="lb-summary-card">
                 <span class="lb-summary-label">Your Best</span>
