@@ -54,6 +54,24 @@ function clean(string $v): string {
     return htmlspecialchars(trim($v), ENT_QUOTES, 'UTF-8');
 }
 
+function csrfToken(): string {
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+function csrfField(): string {
+    return '<input type="hidden" name="csrf_token" value="' . csrfToken() . '">';
+}
+
+function csrfCheck(): bool {
+    $sent = $_POST['csrf_token'] ?? '';
+    $known = $_SESSION['csrf_token'] ?? '';
+    return is_string($sent) && $known !== '' && hash_equals($known, $sent);
+}
+
 function getNodeText(array $node, string $class): string {
     $key = 'text_' . $class;
     return $node[$key] ?? $node['text_warrior'];
