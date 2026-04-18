@@ -5,14 +5,39 @@ require_once __DIR__ . '/data/story.php';
 $scores = loadScores();
 $username = $_SESSION['user'];
 
-// Sort all scores descending
-usort($scores, fn($a, $b) => $b['score'] <=> $a['score']);
+// Filter + sort inputs (whitelisted)
+$allowed_endings = ['all', 'heroic', 'tragic', 'secret', 'death'];
+$allowed_classes = ['all', 'warrior', 'mage', 'rogue'];
+$allowed_sorts   = ['score_desc', 'score_asc', 'date_desc', 'date_asc'];
 
-// Player's own history
+$filter_ending = in_array($_GET['ending'] ?? 'all', $allowed_endings, true) ? $_GET['ending'] ?? 'all' : 'all';
+$filter_class  = in_array($_GET['class']  ?? 'all', $allowed_classes, true) ? $_GET['class']  ?? 'all' : 'all';
+$sort_mode     = in_array($_GET['sort']   ?? 'score_desc', $allowed_sorts, true) ? $_GET['sort'] ?? 'score_desc' : 'score_desc';
+
+// Player's own history — always by score desc, unfiltered
 $my_games = array_values(array_filter($scores, fn($s) => strcasecmp($s['username'], $username) === 0));
+usort($my_games, fn($a, $b) => $b['score'] <=> $a['score']);
 
-// Top 10 global
-$top = array_slice($scores, 0, 10);
+// Global list: apply filters, then sort
+$global = $scores;
+if ($filter_ending !== 'all') {
+    $global = array_filter($global, fn($s) => ($s['ending'] ?? '') === $filter_ending);
+}
+if ($filter_class !== 'all') {
+    $global = array_filter($global, fn($s) => ($s['class'] ?? '') === $filter_class);
+}
+$global = array_values($global);
+
+usort($global, function ($a, $b) use ($sort_mode) {
+    return match ($sort_mode) {
+        'score_asc'  => $a['score'] <=> $b['score'],
+        'date_desc'  => strtotime($b['date'] ?? '0') <=> strtotime($a['date'] ?? '0'),
+        'date_asc'   => strtotime($a['date'] ?? '0') <=> strtotime($b['date'] ?? '0'),
+        default      => $b['score'] <=> $a['score'],
+    };
+});
+
+$top = array_slice($global, 0, 10);
 
 // Summary stats
 $total_games  = count($scores);
@@ -123,8 +148,43 @@ $page_title = 'Hall of Legends &middot; The Shattered Crown';
         <!-- Global Leaderboard -->
         <section class="lb-section">
             <h2 class="lb-section-title">Global Rankings</h2>
+
+            <form method="GET" action="leaderboard.php" class="lb-filters">
+                <label class="lb-filter">
+                    <span class="lb-filter-label">Ending</span>
+                    <select name="ending" onchange="this.form.submit()">
+                        <option value="all"    <?= $filter_ending === 'all'    ? 'selected' : '' ?>>All</option>
+                        <option value="heroic" <?= $filter_ending === 'heroic' ? 'selected' : '' ?>>Heroic</option>
+                        <option value="tragic" <?= $filter_ending === 'tragic' ? 'selected' : '' ?>>Tragic</option>
+                        <option value="secret" <?= $filter_ending === 'secret' ? 'selected' : '' ?>>Secret</option>
+                        <option value="death"  <?= $filter_ending === 'death'  ? 'selected' : '' ?>>Death</option>
+                    </select>
+                </label>
+                <label class="lb-filter">
+                    <span class="lb-filter-label">Class</span>
+                    <select name="class" onchange="this.form.submit()">
+                        <option value="all"     <?= $filter_class === 'all'     ? 'selected' : '' ?>>All</option>
+                        <option value="warrior" <?= $filter_class === 'warrior' ? 'selected' : '' ?>>Warrior</option>
+                        <option value="mage"    <?= $filter_class === 'mage'    ? 'selected' : '' ?>>Mage</option>
+                        <option value="rogue"   <?= $filter_class === 'rogue'   ? 'selected' : '' ?>>Rogue</option>
+                    </select>
+                </label>
+                <label class="lb-filter">
+                    <span class="lb-filter-label">Sort</span>
+                    <select name="sort" onchange="this.form.submit()">
+                        <option value="score_desc" <?= $sort_mode === 'score_desc' ? 'selected' : '' ?>>Score &mdash; High to Low</option>
+                        <option value="score_asc"  <?= $sort_mode === 'score_asc'  ? 'selected' : '' ?>>Score &mdash; Low to High</option>
+                        <option value="date_desc"  <?= $sort_mode === 'date_desc'  ? 'selected' : '' ?>>Date &mdash; Newest First</option>
+                        <option value="date_asc"   <?= $sort_mode === 'date_asc'   ? 'selected' : '' ?>>Date &mdash; Oldest First</option>
+                    </select>
+                </label>
+                <?php if ($filter_ending !== 'all' || $filter_class !== 'all' || $sort_mode !== 'score_desc'): ?>
+                    <a href="leaderboard.php" class="lb-filter-clear">Clear</a>
+                <?php endif; ?>
+            </form>
+
             <?php if (empty($top)): ?>
-                <p class="lb-empty">No legends have been recorded yet. Be the first to complete the quest.</p>
+                <p class="lb-empty">No legends match these filters. Try relaxing the criteria.</p>
             <?php else: ?>
             <div class="lb-table-wrap">
                 <table class="lb-table lb-table-global">
