@@ -14,6 +14,7 @@ $alignment = $_SESSION['alignment'] ?? 0;
 $visited   = $hero['nodes_visited'] ?? [];
 $locked    = $_SESSION['locked_log'] ?? [];
 $inventory = $hero['inventory'] ?? [];
+$journey   = $_SESSION['choices_log'] ?? [];
 
 // Determine ending
 $death = isset($_GET['reason']) && $_GET['reason'] === 'death';
@@ -117,6 +118,23 @@ $page_title = $ending_title . ' &middot; The Shattered Crown';
                 <p>Your journey ends here, but the Crown remains shattered. Perhaps another seeker will rise where you fell.</p>
             <?php endif; ?>
         </div>
+
+        <?php if (!empty($journey)): ?>
+        <div class="ending-journey">
+            <span class="journey-label">YOUR JOURNEY &mdash; <?= count($journey) ?> CHOICES</span>
+            <ol class="journey-list">
+                <?php foreach ($journey as $i => $step): ?>
+                    <li class="journey-step">
+                        <span class="journey-step-num"><?= str_pad($i + 1, 2, '0', STR_PAD_LEFT) ?></span>
+                        <div class="journey-step-body">
+                            <span class="journey-step-title"><?= clean($step['title'] ?? '—') ?></span>
+                            <span class="journey-step-choice">&ldquo;<?= clean($step['choice'] ?? '') ?>&rdquo;</span>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+        </div>
+        <?php endif; ?>
 
         <div class="ending-actions">
             <a href="leaderboard.php" class="btn btn-primary">Record Your Legend</a>
