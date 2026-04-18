@@ -33,6 +33,12 @@ if (!$existing_save && !empty($_COOKIE['sc_node'])) {
     }
 }
 
+// CSRF guard for all POSTs on this page
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !csrfCheck()) {
+    header('Location: character.php');
+    exit;
+}
+
 // Handle continue / delete save actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'continue' && $existing_save) {
@@ -117,10 +123,12 @@ include __DIR__ . '/includes/header.php';
         </div>
         <div class="save-actions">
             <form method="POST" action="character.php" style="display:inline">
+                <?= csrfField() ?>
                 <input type="hidden" name="action" value="continue">
                 <button type="submit" class="btn btn-primary btn-select">Continue Journey</button>
             </form>
             <form method="POST" action="character.php" style="display:inline">
+                <?= csrfField() ?>
                 <input type="hidden" name="action" value="new_game">
                 <button type="submit" class="btn btn-danger btn-select" onclick="return confirm('This will erase your saved progress. Are you sure?')">New Game</button>
             </form>
@@ -135,6 +143,7 @@ include __DIR__ . '/includes/header.php';
     <?php endif; ?>
 
     <form method="POST" action="character.php">
+        <?= csrfField() ?>
         <div class="field char-name-field">
             <label for="hero_name">Hero Name</label>
             <input type="text" id="hero_name" name="hero_name" value="<?= $old_name ?>" placeholder="Enter your legend..." required>
