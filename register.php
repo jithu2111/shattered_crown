@@ -11,6 +11,9 @@ $errors = [];
 $old = ['username' => '', 'email' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!csrfCheck()) {
+        $errors['general'] = 'The sigil on your oath is broken. Try again.';
+    }
     $username = trim($_POST['username'] ?? '');
     $email    = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
@@ -29,6 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'A valid raven address is required.';
+    } elseif (strlen($email) > 254) {
+        $errors['email'] = 'That raven address is too long.';
     }
 
     if (strlen($password) < 8) {
@@ -67,6 +72,7 @@ include __DIR__ . '/includes/header.php';
     <?php endif; ?>
 
     <form method="POST" action="register.php" novalidate>
+        <?= csrfField() ?>
         <div class="field">
             <label for="username">Hero Name</label>
             <input type="text" id="username" name="username" value="<?= $old['username'] ?>" autocomplete="username" required>

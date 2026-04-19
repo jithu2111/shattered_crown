@@ -20,17 +20,39 @@ if ($existing_save) {
     }
 }
 
+// Cookie-based resume hint: if no save file but cookie points at a mid-run node,
+// surface the node so the player knows progress was partially recoverable.
+$cookie_resume = null;
+if (!$existing_save && !empty($_COOKIE['sc_node'])) {
+    $cookie_node = $_COOKIE['sc_node'];
+    if (isset($nodes[$cookie_node]) && !$nodes[$cookie_node]['is_terminal']) {
+        $cookie_resume = [
+            'node'  => $cookie_node,
+            'title' => $nodes[$cookie_node]['title'],
+        ];
+    }
+}
+
+// CSRF guard for all POSTs on this page
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !csrfCheck()) {
+    header('Location: character.php');
+    exit;
+}
+
 // Handle continue / delete save actions
+$confirm_new_game = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'continue' && $existing_save) {
         restoreSave($existing_save);
         header('Location: game.php');
         exit;
     }
-    if ($_POST['action'] === 'new_game') {
+    if ($_POST['action'] === 'new_game_request' && $existing_save) {
+        $confirm_new_game = true;
+    }
+    if ($_POST['action'] === 'new_game_confirm') {
         resetGame();
         $existing_save = null;
-        // Fall through to show character creation form
     }
 }
 
@@ -102,20 +124,43 @@ include __DIR__ . '/includes/header.php';
             <?php endif; ?>
             <span class="save-time">Saved <?= date('M j, g:i A', strtotime($existing_save['saved_at'])) ?></span>
         </div>
+        <?php if ($confirm_new_game): ?>
+        <div class="save-confirm">
+            <p class="save-confirm-text">This will erase your saved progress. Begin a new legend?</p>
+            <div class="save-actions">
+                <form method="POST" action="character.php" class="save-action-form">
+                    <?= csrfField() ?>
+                    <input type="hidden" name="action" value="new_game_confirm">
+                    <button type="submit" class="btn btn-danger btn-select">Yes, Begin Anew</button>
+                </form>
+                <a href="character.php" class="btn btn-primary btn-select">Cancel</a>
+            </div>
+        </div>
+        <?php else: ?>
         <div class="save-actions">
-            <form method="POST" action="character.php" style="display:inline">
+            <form method="POST" action="character.php" class="save-action-form">
+                <?= csrfField() ?>
                 <input type="hidden" name="action" value="continue">
                 <button type="submit" class="btn btn-primary btn-select">Continue Journey</button>
             </form>
-            <form method="POST" action="character.php" style="display:inline">
-                <input type="hidden" name="action" value="new_game">
-                <button type="submit" class="btn btn-danger btn-select" onclick="return confirm('This will erase your saved progress. Are you sure?')">New Game</button>
+            <form method="POST" action="character.php" class="save-action-form">
+                <?= csrfField() ?>
+                <input type="hidden" name="action" value="new_game_request">
+                <button type="submit" class="btn btn-danger btn-select">New Game</button>
             </form>
         </div>
+        <?php endif; ?>
     </div>
     <?php else: ?>
 
+    <?php if ($cookie_resume): ?>
+        <div class="flash flash-error">
+            The last trace of your journey points to <strong><?= clean($cookie_resume['title']) ?></strong>, but the saved scroll could not be read. A new legend must begin.
+        </div>
+    <?php endif; ?>
+
     <form method="POST" action="character.php">
+        <?= csrfField() ?>
         <div class="field char-name-field">
             <label for="hero_name">Hero Name</label>
             <input type="text" id="hero_name" name="hero_name" value="<?= $old_name ?>" placeholder="Enter your legend..." required>

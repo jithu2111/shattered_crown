@@ -25,6 +25,10 @@ if (isDead()) {
 
 // ── POST: process a choice ────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!csrfCheck()) {
+        header('Location: game.php');
+        exit;
+    }
     $choice_id = $_POST['choice_id'] ?? '';
 
     $chosen = null;
@@ -309,6 +313,7 @@ $body_class = 'page-game';
                 </div>
             <?php else: ?>
                 <form method="POST" action="game.php" class="choice-form">
+                    <?= csrfField() ?>
                     <input type="hidden" name="choice_id" value="<?= clean($c['id']) ?>">
                     <button type="submit" class="choice-card unlocked">
                         <span class="choice-text"><?= clean($c['text']) ?></span>

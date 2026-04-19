@@ -13,6 +13,9 @@ $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!csrfCheck()) {
+        $error = 'The sigil on your vow is broken. Try again.';
+    } else {
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
     $old_username = clean($username);
@@ -28,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
         $error = 'The name or vow is false.';
+    }
     }
 }
 
@@ -46,6 +50,7 @@ include __DIR__ . '/includes/header.php';
     <?php endif; ?>
 
     <form method="POST" action="login.php" novalidate>
+        <?= csrfField() ?>
         <div class="field">
             <label for="username">Hero Name</label>
             <input type="text" id="username" name="username" value="<?= $old_username ?>" autocomplete="username" required>
