@@ -6,7 +6,7 @@ $scores = loadScores();
 $username = $_SESSION['user'];
 
 // Filter + sort inputs (whitelisted)
-$allowed_endings = ['all', 'heroic', 'tragic', 'secret', 'death'];
+$allowed_endings = ['all', 'heroic', 'tragic', 'secret', 'pyrrhic', 'death'];
 $allowed_classes = ['all', 'warrior', 'mage', 'rogue'];
 $allowed_sorts   = ['score_desc', 'score_asc', 'date_desc', 'date_asc'];
 
@@ -50,10 +50,11 @@ $best_score   = !empty($scores) ? $scores[0]['score'] : 0;
 $my_best      = !empty($my_games) ? $my_games[0]['score'] : 0;
 
 $ending_colors = [
-    'heroic' => 'ending-tag-heroic',
-    'tragic' => 'ending-tag-tragic',
-    'secret' => 'ending-tag-secret',
-    'death'  => 'ending-tag-death',
+    'heroic'  => 'ending-tag-heroic',
+    'tragic'  => 'ending-tag-tragic',
+    'secret'  => 'ending-tag-secret',
+    'pyrrhic' => 'ending-tag-pyrrhic',
+    'death'   => 'ending-tag-death',
 ];
 
 $page_title = 'Hall of Legends &middot; The Shattered Crown';
@@ -158,11 +159,12 @@ $page_title = 'Hall of Legends &middot; The Shattered Crown';
                 <label class="lb-filter">
                     <span class="lb-filter-label">Ending</span>
                     <select name="ending">
-                        <option value="all"    <?= $filter_ending === 'all'    ? 'selected' : '' ?>>All</option>
-                        <option value="heroic" <?= $filter_ending === 'heroic' ? 'selected' : '' ?>>Heroic</option>
-                        <option value="tragic" <?= $filter_ending === 'tragic' ? 'selected' : '' ?>>Tragic</option>
-                        <option value="secret" <?= $filter_ending === 'secret' ? 'selected' : '' ?>>Secret</option>
-                        <option value="death"  <?= $filter_ending === 'death'  ? 'selected' : '' ?>>Death</option>
+                        <option value="all"     <?= $filter_ending === 'all'     ? 'selected' : '' ?>>All</option>
+                        <option value="heroic"  <?= $filter_ending === 'heroic'  ? 'selected' : '' ?>>Heroic</option>
+                        <option value="tragic"  <?= $filter_ending === 'tragic'  ? 'selected' : '' ?>>Tragic</option>
+                        <option value="secret"  <?= $filter_ending === 'secret'  ? 'selected' : '' ?>>Secret</option>
+                        <option value="pyrrhic" <?= $filter_ending === 'pyrrhic' ? 'selected' : '' ?>>Pyrrhic</option>
+                        <option value="death"   <?= $filter_ending === 'death'   ? 'selected' : '' ?>>Death</option>
                     </select>
                 </label>
                 <label class="lb-filter">

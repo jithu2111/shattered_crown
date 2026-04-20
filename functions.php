@@ -97,6 +97,12 @@ function canChoose(array $choice): bool {
     if ($choice['required_item'] !== null) {
         if (!in_array($choice['required_item'], $_SESSION['hero']['inventory'] ?? [], true)) return false;
     }
+    if (!empty($choice['required_items']) && is_array($choice['required_items'])) {
+        $inventory = $_SESSION['hero']['inventory'] ?? [];
+        foreach ($choice['required_items'] as $needed) {
+            if (!in_array($needed, $inventory, true)) return false;
+        }
+    }
     return true;
 }
 
@@ -109,6 +115,13 @@ function getLockReason(array $choice): string {
     }
     if ($choice['required_item'] !== null) {
         return "Requires: " . $choice['required_item'];
+    }
+    if (!empty($choice['required_items']) && is_array($choice['required_items'])) {
+        $inventory = $_SESSION['hero']['inventory'] ?? [];
+        $missing = array_diff($choice['required_items'], $inventory);
+        if (!empty($missing)) {
+            return "Requires all: " . implode(', ', $choice['required_items']);
+        }
     }
     return 'Locked';
 }
@@ -189,7 +202,10 @@ function getArchetypeMatch(string $persona, string $ending_type, int $alignment)
     }
     $percent = max(5, min(99, $base + ($matched ? $adjust : -$adjust)));
 
-    if ($matched) {
+    if ($ending_type === 'pyrrhic') {
+        $percent = max($percent, 85);
+        $verdict = "You walked every road this kingdom offered and paid the toll with your own life. $persona is the name the bards will sing — and never speak aloud.";
+    } elseif ($matched) {
         $verdict = "Your actions rang true. $persona was always the name fate wrote.";
     } elseif ($ending_type === 'death') {
         $verdict = "The ending claimed you before your persona could settle. $persona was a path cut short.";
@@ -234,6 +250,15 @@ function getAlternativePaths(array $nodes, array $locked_log, array $hero): arra
                     'choice_text' => $c['text'],
                     'kind'        => 'item',
                     'item'        => $c['required_item'],
+                ];
+            } elseif (!empty($c['required_items']) && is_array($c['required_items'])) {
+                $missing = array_values(array_diff($c['required_items'], $hero['inventory'] ?? []));
+                $suggestions[] = [
+                    'node_title'  => $node['title'],
+                    'choice_text' => $c['text'],
+                    'kind'        => 'items',
+                    'item'        => implode(' + ', $c['required_items']),
+                    'missing'     => $missing,
                 ];
             }
             break;

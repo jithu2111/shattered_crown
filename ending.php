@@ -76,10 +76,11 @@ $locked_count  = count($locked);
 
 // Ending label + color class
 $ending_labels = [
-    'heroic' => ['Heroic Victory', 'ending-heroic'],
-    'tragic' => ['Tragic Failure', 'ending-tragic'],
-    'secret' => ['Secret Path',    'ending-secret'],
-    'death'  => ['Fallen',         'ending-death'],
+    'heroic'  => ['Heroic Victory',   'ending-heroic'],
+    'tragic'  => ['Tragic Failure',   'ending-tragic'],
+    'secret'  => ['Secret Path',      'ending-secret'],
+    'pyrrhic' => ['Pyrrhic Sacrifice','ending-pyrrhic'],
+    'death'   => ['Fallen',           'ending-death'],
 ];
 $label_data = $ending_labels[$ending_type] ?? ['Unknown', 'ending-tragic'];
 

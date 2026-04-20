@@ -31,10 +31,10 @@ This is a **solo project**. All design, code, narrative writing, and deployment 
 ### Core gameplay
 - **Authentication** — registration with username/email/password, login with session regeneration, logout
 - **Character creation** — 3 classes (Warrior / Mage / Rogue) with distinct HP, STR, WIS stats
-- **Branching narrative** — 17 story nodes across Acts 1–3, plus 3 ending nodes
+- **Branching narrative** — 17 story nodes across Acts 1–3, plus 4 ending nodes
 - **Stat- and item-gated choices** — locked options display the requirement instead of the form
 - **Inventory system** — items granted by choices, consumed when required by later choices
-- **Three unique endings** — Heroic Victory, Tragic Failure, Secret Path (plus a Death screen)
+- **Four unique endings** — Heroic Victory, Tragic Failure, Secret Path, Pyrrhic Sacrifice (plus a Death screen)
 - **Save / load / resume** — persistent save file per user, cookie-based node hint for recovery
 
 ### Graduate-tier features

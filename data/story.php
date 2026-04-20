@@ -415,6 +415,12 @@ $nodes = [
                 'required_item' => null, 'stat_changes' => [],
                 'items_granted' => [], 'alignment' => -5,
             ],
+            [
+                'id' => 'sacrifice_duel', 'text' => 'Fuse all three shards and bind the Crown to your dying breath',
+                'next' => 'node_ending_pyrrhic', 'required_stat' => null, 'required_val' => null,
+                'required_item' => null, 'required_items' => ['Crown Shard: Ember', 'Crown Shard: Frost', 'Crown Shard: Shadow'],
+                'stat_changes' => [], 'items_granted' => [], 'alignment' => 4,
+            ],
         ],
         'is_terminal' => false, 'ending_type' => null,
     ],
@@ -438,6 +444,12 @@ $nodes = [
                 'required_item' => null, 'stat_changes' => [],
                 'items_granted' => [], 'alignment' => -5,
             ],
+            [
+                'id' => 'sacrifice_ritual', 'text' => 'Fuse all three shards and channel the collapse through your own body',
+                'next' => 'node_ending_pyrrhic', 'required_stat' => null, 'required_val' => null,
+                'required_item' => null, 'required_items' => ['Crown Shard: Ember', 'Crown Shard: Frost', 'Crown Shard: Shadow'],
+                'stat_changes' => [], 'items_granted' => [], 'alignment' => 4,
+            ],
         ],
         'is_terminal' => false, 'ending_type' => null,
     ],
@@ -460,6 +472,12 @@ $nodes = [
                 'next' => 'node_ending_secret', 'required_stat' => null, 'required_val' => null,
                 'required_item' => null, 'stat_changes' => [],
                 'items_granted' => [], 'alignment' => -5,
+            ],
+            [
+                'id' => 'sacrifice_stealth', 'text' => 'Fuse all three shards and let the Crown consume you with it',
+                'next' => 'node_ending_pyrrhic', 'required_stat' => null, 'required_val' => null,
+                'required_item' => null, 'required_items' => ['Crown Shard: Ember', 'Crown Shard: Frost', 'Crown Shard: Shadow'],
+                'stat_changes' => [], 'items_granted' => [], 'alignment' => 4,
             ],
         ],
         'is_terminal' => false, 'ending_type' => null,
@@ -495,6 +513,16 @@ $nodes = [
         'text_rogue'   => 'You wear the Crown in the dark where no one can see. Valdris awakens from the eclipse to find a new hand on the strings. They\'ll never know it\'s yours.',
         'choices' => [],
         'is_terminal' => true, 'ending_type' => 'secret',
+    ],
+
+    'node_ending_pyrrhic' => [
+        'id'    => 'node_ending_pyrrhic',
+        'title' => 'The Ashen Oath',
+        'text_warrior' => 'You press all three shards into your own chest. The Crown fuses with bone and blood and will. Malachar shrieks as the binding reverses — his power pouring into you, and through you, into nothing. When the eclipse breaks, Valdris finds only a silent figure seated on the obsidian throne, armor fused to stone. You saved them. You will never leave this room.',
+        'text_mage'    => 'You weave the three shards into a final, impossible spell — one that requires a living anchor. The Crown completes itself inside you. Malachar unravels. So do you, slowly, as the arcane pattern locks your soul into the throne as its new warden. The sky clears. The kingdom is saved. No one will ever hear you speak again.',
+        'text_rogue'   => 'You palm all three shards and press them together against your ribs. The Crown fuses with your heartbeat — a binding only a living thief could make. Malachar screams as the shadow-weave snaps back through him. The eclipse breaks. You slump against the throne, smiling. The kingdom lives. You will not see the dawn.',
+        'choices' => [],
+        'is_terminal' => true, 'ending_type' => 'pyrrhic',
     ],
 
 ];

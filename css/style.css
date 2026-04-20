@@ -1252,10 +1252,11 @@ a:hover { color: var(--gold-soft); }
     text-transform: uppercase;
 }
 
-.ending-tag-heroic { background: rgba(127, 176, 105, 0.15); color: var(--success); border: 1px solid rgba(127, 176, 105, 0.3); }
-.ending-tag-secret { background: rgba(106, 169, 230, 0.15); color: var(--blue-ice); border: 1px solid rgba(106, 169, 230, 0.3); }
-.ending-tag-tragic { background: rgba(196, 30, 58, 0.15); color: var(--crimson-hot); border: 1px solid rgba(196, 30, 58, 0.3); }
-.ending-tag-death  { background: rgba(196, 30, 58, 0.1);  color: #ff8a8a;          border: 1px solid rgba(196, 30, 58, 0.2); }
+.ending-tag-heroic  { background: rgba(127, 176, 105, 0.15); color: var(--success); border: 1px solid rgba(127, 176, 105, 0.3); }
+.ending-tag-secret  { background: rgba(106, 169, 230, 0.15); color: var(--blue-ice); border: 1px solid rgba(106, 169, 230, 0.3); }
+.ending-tag-tragic  { background: rgba(196, 30, 58, 0.15); color: var(--crimson-hot); border: 1px solid rgba(196, 30, 58, 0.3); }
+.ending-tag-pyrrhic { background: rgba(207, 168, 87, 0.12); color: #d8c9a3;           border: 1px solid rgba(207, 168, 87, 0.35); }
+.ending-tag-death   { background: rgba(196, 30, 58, 0.1);  color: #ff8a8a;            border: 1px solid rgba(196, 30, 58, 0.2); }
 
 .lb-filters {
     display: flex;
@@ -1392,10 +1393,11 @@ a:hover { color: var(--gold-soft); }
     color: var(--muted);
 }
 
-.ending-heroic .outcome-line { color: var(--gold-soft); }
-.ending-tragic .outcome-line { color: var(--crimson-hot); }
-.ending-secret .outcome-line { color: var(--blue-ice); }
-.ending-death .outcome-line  { color: var(--crimson-hot); }
+.ending-heroic .outcome-line  { color: var(--gold-soft); }
+.ending-tragic .outcome-line  { color: var(--crimson-hot); }
+.ending-secret .outcome-line  { color: var(--blue-ice); }
+.ending-pyrrhic .outcome-line { color: #d8c9a3; }
+.ending-death .outcome-line   { color: var(--crimson-hot); }
 
 .ending-headline {
     font-size: clamp(2.5rem, 6vw, 4rem);
@@ -1404,10 +1406,11 @@ a:hover { color: var(--gold-soft); }
     margin-bottom: 1.5rem;
 }
 
-.ending-heroic .ending-headline { color: var(--parchment); }
-.ending-tragic .ending-headline { color: var(--crimson-hot); }
-.ending-secret .ending-headline { color: var(--blue-ice); }
-.ending-death .ending-headline  { color: var(--crimson-hot); }
+.ending-heroic .ending-headline  { color: var(--parchment); }
+.ending-tragic .ending-headline  { color: var(--crimson-hot); }
+.ending-secret .ending-headline  { color: var(--blue-ice); }
+.ending-pyrrhic .ending-headline { color: #d8c9a3; }
+.ending-death .ending-headline   { color: var(--crimson-hot); }
 
 .ending-story {
     max-width: 540px;
