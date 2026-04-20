@@ -68,6 +68,7 @@ This is a **solo project**. All design, code, narrative writing, and deployment 
 ```
 shattered_crown/
 ├── index.php                 Landing page
+├── lore.php                  Chronicle of Valdris (worldbuilding + no-spoiler intro)
 ├── register.php              Account creation
 ├── login.php                 Authentication
 ├── logout.php                Session teardown

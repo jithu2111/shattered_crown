@@ -1,4 +1,6 @@
-# Shattered Crown — Architecture & Story Diagrams
+
+
+ grx# Shattered Crown — Architecture & Story Diagrams
 
 Two Mermaid diagrams and a full narrative walkthrough of the project:
 

@@ -20,6 +20,7 @@ include __DIR__ . '/includes/header.php';
     <div class="landing-actions">
         <a href="login.php" class="btn btn-primary">Invoke Legacy</a>
         <a href="register.php" class="btn btn-danger">Take the Oath</a>
+        <a href="lore.php" class="btn btn-link">Read the Chronicle</a>
     </div>
 </section>
 <?php include __DIR__ . '/includes/footer.php'; ?>
